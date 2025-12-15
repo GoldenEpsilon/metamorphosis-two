@@ -1,2 +1,2 @@
 /loadmod meta_main
-/loadskill turtle_shell
+/loadskill mutations/turtle_shell
