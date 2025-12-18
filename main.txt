@@ -1,3 +1,4 @@
 /loadmod meta_main
 /loadskill mutations/turtle_shell
 /loadskill mutations/wasteland_king
+/load ultras
