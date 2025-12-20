@@ -1,4 +1,6 @@
 /loadmod meta_main
+/loadskill mutations/racing_thoughts
 /loadskill mutations/turtle_shell
+/loadskill mutations/frigid_breath
 /loadskill mutations/wasteland_king
 /load ultras
