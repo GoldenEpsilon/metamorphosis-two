@@ -1,13 +1,13 @@
 #define init
 	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
-	//global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
+	global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
 
     //global.frigid = script_bind_draw(draw_frigid, 0);
 
 #define skill_name    return "FRIGID BREATH";
 #define skill_text    return "ALL @wPICKUPS@s LAST LONGER";
 #define skill_ttip    return "keep your cool";
-//#define skill_icon    return global.sprSkillHUD;
+#define skill_icon    return global.sprSkillHUD;
 #define skill_button  sprite_index = global.sprSkillIcon;
 #define skill_type	  return "utility";
 #define skill_take    
