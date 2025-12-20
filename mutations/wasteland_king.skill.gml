@@ -2,7 +2,7 @@
 	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
 	global.sprSkillHUD  = sprite_add("sprites/HUD/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
 	global.sndSkillSlct = sound_add("sounds/sndMut" + string_upper(string(mod_current)) + ".ogg");
-	
+	global.sprMoneyBright = sprite_add("sprites/effects/sprMoneyBright.png",1,4,2);
 	/* NOTES:
 		-YV WK uses it's own draw function, i can make this a single draw event if more races use draw functions
 	*/
@@ -116,7 +116,7 @@
 					
 					//draw controler
 					if !instance_exists(wk_yv_draw) {
-						with script_bind_draw(wk_yv_draw_script,-3,self) {
+						with script_bind_draw(wk_yv_draw_script,-7,self) {
 							other.wk_yv_draw = self;
 							goal = 0;
 							current = 0;
@@ -129,7 +129,7 @@
 					//load up to 3 extra shots
 					var load = weapon_get_load(wep);
 					var lmax = load * yv_max_preload * skill_get(mod_current) * -1;
-					if reload <= 0 && reload > lmax {
+					if reload <= 0 && reload > lmax && load > 0 {
 						wk_yv_preload += current_time_scale * 0.5;
 						if reload == 0 reload = 0; //TRUST ME this is neccesary
 						else if reload < 0 reload = ceil(reload/load) * load;
@@ -192,20 +192,21 @@
 	}
 	
 	//variables
-	var rad = 16;
-	var ang = 40;
+	var rad = 13;
+	var ang = 50;
 	var tot = ang * goal;
 	var bob = 2.5;
+	var yoff = -6
 
 	//draw moni
 	for (var i = 0; i < goal; i ++) {
 		var _o = i - max(0,(goal * 0.5) - 0.5);
 		var _a = 90 + ang * _o;
 		var _x = _inst.x + lengthdir_x(rad + (bob * sin(current_frame/10 + i)),_a);
-		var _y = _inst.y + lengthdir_y(rad + (bob * sin(current_frame/10 + i)),_a) - 4;
+		var _y = _inst.y + lengthdir_y(rad + (bob * sin(current_frame/10 + i)),_a) + yoff;
 		
 		draw_sprite_ext(
-			sprMoney,
+			global.sprMoneyBright,
 			0,
 			_x,
 			_y, 
@@ -215,13 +216,6 @@
 			c_white,
 			1
 		);
-		
-		//spawn sparkles for new moni
-		if i == 0 {
-			if goal > current {
-
-			}
-		}
 	}
 	
 	//set new goal
@@ -230,9 +224,9 @@
 	//spawn cosmetics
 	if goal > current {
 		var _x = _inst.x + lengthdir_x(rad + (bob * sin(current_frame/10 + i)),90 + ang * max(0,(goal * 0.5) - 0.5));
-		var _y = _inst.y + lengthdir_y(rad + (bob * sin(current_frame/10 + i)),90 + ang * max(0,(goal * 0.5) - 0.5)) - 4;
+		var _y = _inst.y + lengthdir_y(rad + (bob * sin(current_frame/10 + i)),90 + ang * max(0,(goal * 0.5) - 0.5)) + yoff;
 		with instance_create(_x,_y,PlasmaTrail) {
-			depth			= -4;
+			depth			= -8;
 			sprite_index	= sprCaveSparkle;
 			image_speed		= 1;
 		}
@@ -242,16 +236,17 @@
 			var _o = i - max(0,(current * 0.5) - 0.5);
 			var _a = 90 + ang * _o;
 			var _x = _inst.x + lengthdir_x(rad + (bob * sin(current_frame/10 + i)),_a);
-			var _y = _inst.y + lengthdir_y(rad + (bob * sin(current_frame/10 + i)),_a) - 4;
+			var _y = _inst.y + lengthdir_y(rad + (bob * sin(current_frame/10 + i)),_a) + yoff;
 			
 			with instance_create(_x,_y,Feather) {
 				sprite_index	= sprMoney;
 				depth			= -1;
 				image_angle		= _a;
 				direction		= 270;
-				image_blend		= c_ltgray;
 			}
 		}
+		sound_play_pitchvol(sndPopPopUpg,1.65 + random(0.1),0.6);
+		sound_play_pitchvol(sndEmpty,1.65 + random(0.1),0.6);
 	}
 	
 	//store current drawn bills
@@ -261,3 +256,4 @@
 #define chance(_numer,_denom)           return random(_denom) < _numer;
 
 #define chance_ct(_numer,_denom)        return random(_denom) < _numer * current_time_scale;
+
