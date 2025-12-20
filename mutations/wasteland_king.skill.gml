@@ -131,7 +131,8 @@
 					var lmax = load * yv_max_preload * skill_get(mod_current) * -1;
 					if reload <= 0 && reload > lmax {
 						wk_yv_preload += current_time_scale * 0.5;
-						reload = ceil(reload/load) * load;
+						if reload == 0 reload = 0; //TRUST ME this is neccesary
+						else if reload < 0 reload = ceil(reload/load) * load;
 						if wk_yv_preload >= load {
 							wk_yv_preload -= load;
 							reload = max(reload - load, lmax);
@@ -258,4 +259,5 @@
 	
 #define orandom(n)                      return random_range(-n,n);
 #define chance(_numer,_denom)           return random(_denom) < _numer;
+
 #define chance_ct(_numer,_denom)        return random(_denom) < _numer * current_time_scale;
