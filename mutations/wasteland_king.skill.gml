@@ -19,6 +19,7 @@
 #define skill_tip     return (chance(99,100) ? "HAIL TO THE KING" : choose("T-GIRL REP","THIS MUTATION MAKES ME FEEL#LIKE THE @wWASTELAND KING!##@s...SAY THAT AGAIN..."));
 #define skill_icon    return global.sprSkillHUD;
 #define skill_button  sprite_index = global.sprSkillIcon;
+#define skill_type    return "utility";
 #define skill_avail   
 	with Player { //if any player has a valid CC, return true. Otherwise return false
 		if race_id < 17 || mod_script_exists("race", race, "race_wk_text") {
