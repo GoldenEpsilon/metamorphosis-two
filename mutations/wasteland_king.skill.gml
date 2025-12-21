@@ -1,7 +1,12 @@
 #define init
+	//Sprites
 	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
 	global.sprSkillHUD  = sprite_add("sprites/HUD/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
-	global.sndSkillSlct = sound_add("sounds/sndMut" + string_upper(string(mod_current)) + ".ogg");
+	
+	//Sounds
+	global.sndSkillSlct = sound_add("sounds/sndSkill" + string_upper(string(mod_current)) + ".ogg");
+	
+	//Other
 	global.sprMoneyBright = sprite_add("sprites/effects/sprMoneyBright.png",1,4,2);
 	/* NOTES:
 		-YV WK uses it's own draw function, i can make this a single draw event if more races use draw functions
@@ -254,6 +259,4 @@
 	
 #define orandom(n)                      return random_range(-n,n);
 #define chance(_numer,_denom)           return random(_denom) < _numer;
-
 #define chance_ct(_numer,_denom)        return random(_denom) < _numer * current_time_scale;
-

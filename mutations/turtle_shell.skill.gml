@@ -1,7 +1,7 @@
 #define init
+	//Sprites
 	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
 	global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
-
 
 #define skill_name    return "TURTLE SHELL";
 #define skill_text    return "ENEMIES DEAL @wLESS DAMAGE@s";

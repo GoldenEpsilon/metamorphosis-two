@@ -1,7 +1,9 @@
 #define init
+	//Sprites
 	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);//global.sprSkillHUD  = sprite_add_base64("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAC6SURBVDhPnVHBDcIwEMuefPgxBR/erMAkSP10At5ISEwS5Ls4cU5pFWrJysUXO5c2bSAHEiOtgzWfy5rfn68RNfWcG4tWYcL1djfSDA0rNDcqWkg1nM4XY5wAGgNeDwaFAB7c4u4E4Mik9JsbaQa6J7COxIQIAeFxq6MeQIC+nz1wdwJQx9WQ3qxoIfX3waw19xrgNTAIQM3bS3Nugll6iFP0flNW1kDt8/tgFX0ao4C/oLceCgCCOaUfX8/I2KnacDsAAAAASUVORK5CYII=",  1,  8,  8);
 	global.sprSkillHUD  = sprite_add_base64("iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAC6SURBVDhPnVHBDcIwEMuefPgxBR/erMAkSP10At5ISEwS5Ls4cU5pFWrJysUXO5c2bSAHEiOtgzWfy5rfn68RNfWcG4tWYcL1djfSDA0rNDcqWkg1nM4XY5wAGgNeDwaFAB7c4u4E4Mik9JsbaQa6J7COxIQIAeFxq6MeQIC+nz1wdwJQx9WQ3qxoIfX3waw19xrgNTAIQM3bS3Nugll6iFP0flNW1kDt8/tgFX0ao4C/oLceCgCCOaUfX8/I2KnacDsAAAAASUVORK5CYII=",  1,  8,  8);
 	
+	//Other
 	skill_set_active(mut_trigger_fingers, 0);
 
 #define skill_name    return "RACING THOUGHTS";

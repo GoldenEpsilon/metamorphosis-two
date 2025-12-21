@@ -1,0 +1,4 @@
+/loadskill frigid_breath
+/loadskill racing_thoughts
+/loadskill turtle_shell
+/loadskill wasteland_king
