@@ -3,6 +3,7 @@
 	global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
 
     //global.frigid = script_bind_draw(draw_frigid, 0);
+    breath_timer = 1;
 
 #define skill_name    return "FRIGID BREATH";
 #define skill_text    return "ALL @wPICKUPS@s LAST LONGER";
@@ -33,6 +34,24 @@
             }
         }
     }
+	
+	//Frocity breathing for all mutants everywhere!
+	if breath_timer > 0 breath_timer--;
+	
+	if breath_timer <= 0{
+		if (random(50) < 1){
+			if (instance_exists(Player)){
+				with (Player){
+					if GameCont.area != 5 or (race = "plant" || race = "robot"){
+								//fucked ass plant position fix VVVV
+						with(instance_create(x + (race == "plant" ? 3 : 0), y - (race == "plant" ? 5 : 0), Breath)) image_xscale = other.right;
+					}
+				}
+			}
+		}
+		
+		breath_timer = 2;
+	}
 
 #define orandom(n)                      return random_range(-n,n);
 #define chance_ct(_numer,_denom)        return random(_denom) < _numer * current_time_scale;
