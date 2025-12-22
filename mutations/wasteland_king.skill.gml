@@ -186,6 +186,8 @@
 					if !instance_exists(wk_begin_step_object) {
 						with script_bind_draw(wk_begin_step, 0, self) other.wk_begin_step_object = self;
 					}
+					
+					if "brittle_health" not in self brittle_health = 0;
 				}
 			break;
 				

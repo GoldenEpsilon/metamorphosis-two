@@ -5,6 +5,8 @@ global.sprWaveBig = sprite_add("mutations/sprites/effects/sprBarWave.png", 8, 0,
 	if skill_get("wasteland_king"){
 		switch(_player.race){
 			case "rebel":
+			//Just outright disable this if you don't have any brittle hp. No reason to be doing extra drawing
+				if "brittle_health" in _player && _player.brittle_health > 0{
 					//Health values
 				var _my_health = _player.my_health,
 					_brittle_health = _player.brittle_health,
@@ -29,9 +31,7 @@ global.sprWaveBig = sprite_add("mutations/sprites/effects/sprBarWave.png", 8, 0,
 					//Text
 					_x3 = _x2 + _maxBarWidth / 2 + 1,
 					_y3 = _y2;
-				
-				//Just outright disable this if you don't have any brittle hp. No reason to be doing extra drawing
-				if _brittle_health > 0{
+					
 					//Main Bar
 					draw_sprite(sprHealthBar, 0, _x1, _y1);
 					
