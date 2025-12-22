@@ -12,6 +12,8 @@
 		-YV WK uses it's own draw function, i can make this a single draw event if more races use draw functions
 	*/
 	
+	global.newLevel = false;
+	
 #macro yv_max_preload		3 
 
 #define skill_name    return "WASTELAND KING";
@@ -21,7 +23,7 @@
 #define skill_button  sprite_index = global.sprSkillIcon;
 #define skill_type    return "utility";
 #define skill_avail   
-	with Player { //if any player has a valid CC, return true. Otherwise return false
+	with Player { //if any player has a valid WK, return true. Otherwise return false
 		if race_id < 17 || mod_script_exists("race", race, "race_wk_text") {
 			return 1;
 		}
@@ -53,7 +55,7 @@
 				case "steroids": t += "@rNYI"; break;
 				case "robot":    t += "@rNYI"; break;
 				case "chicken":  t += "@rNYI"; break;
-				case "rebel":    t += "@rNYI"; break;
+				case "rebel":    t += "@sPORTALS GRANT @w2 @rBRITTLE HP@s"; break;
 				case "horror":   t += "@rNYI"; break;
 				case "rogue":    t += "@rNYI"; break;
 				case "skeleton": t += "@rNYI"; break;
@@ -83,6 +85,10 @@
 
 	for(var i = 0; i < array_length(raceList); i++){
 		switch(raceList[i]){
+			case "rebel":
+				wk_rebel_brittle_grant();
+			break;
+			
 			default:
 				with(instances_matching_gt(instances_matching(Player, "race", raceList[i]), "race_id", 16)) {
 					if(mod_script_exists("race", raceList[i], "race_wk_take")) mod_script_call("race", raceList[i], "race_wk_take");
@@ -120,7 +126,7 @@
 						wk_yv_draw = noone;
 					}
 					
-					//draw controler
+					//draw controller
 					if !instance_exists(wk_yv_draw) {
 						with script_bind_draw(wk_yv_draw_script,-7,self) {
 							other.wk_yv_draw = self;
@@ -153,7 +159,7 @@
 					}
 					
 				}
-				break;
+			break;
 				
 			case "robot":
 				break;
@@ -162,7 +168,26 @@
 				break;
 				
 			case "rebel":
-				break;
+				if(instance_exists(GenCont)) global.newLevel = true;
+				
+				else if(global.newLevel){
+					global.newLevel = false;
+					wk_level_start("rebel");
+				}
+				
+				with(instances_matching(Player, "race", "rebel")){
+					//initialize
+					if "wk_rebel_preload" not in self {
+						wk_rebel_preload = 0;
+						wk_begin_step_object = noone;
+					}
+					
+					//begin step controller
+					if !instance_exists(wk_begin_step_object) {
+						with script_bind_draw(wk_begin_step, 0, self) other.wk_begin_step_object = self;
+					}
+				}
+			break;
 				
 			case "rogue":
 				break;
@@ -189,6 +214,59 @@
 				}
 			break;
 		}
+	}
+
+#define wk_level_start(race)
+	switch(race){
+		case "rebel":
+			wk_rebel_brittle_grant();
+			break;
+	}
+
+#define wk_begin_step(_inst)
+	if !instance_exists(_inst) {
+		instance_destroy();
+		exit;
+	}
+
+	switch(_inst.race){
+		case "rebel":
+			with(_inst){
+				if brittle_health > 0{
+					if my_health != pass_health{
+						if my_health < pass_health{
+							flash = true;
+							
+							if !button_check(index, "spec"){
+								var _damage = pass_health - my_health,
+									_last_brittle_health = brittle_health;
+								
+								//Reset damage taken
+								my_health = pass_health;
+								
+								//Subtract relevant brittle health
+								brittle_health = max(brittle_health - _damage, 0);
+								
+								//If brittle health all gone, do remainder of proper damage
+								if brittle_health <= 0 my_health -= _damage - _last_brittle_health;
+							}
+						}
+						
+						pass_health = my_health;
+					}
+				}
+			}
+			break;
+	}
+
+#define wk_rebel_brittle_grant
+	with(instances_matching(Player, "race", "rebel")){
+        brittle_health = 2;
+        lstbrittle_health = brittle_health;
+        
+    	pass_health = my_health;
+    	
+    	flash = false;
 	}
 
 #define wk_yv_draw_script(_inst)
