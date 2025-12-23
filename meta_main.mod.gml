@@ -36,18 +36,20 @@ global.sprWaveBig = sprite_add("mutations/sprites/effects/sprBarWave.png", 8, 0,
 					draw_sprite(sprHealthBar, 0, _x1, _y1);
 					
 					//Health bar main
-					draw_set_color(_player.flash ? c_white : player_get_color(_hudIndex))
-					draw_rectangle(_x2, _y2, _mainBarWidth, _barHeight, false);
-					
+					var col = player_get_color(_hudIndex);
+					draw_set_color(_player.flash ? c_white : col);
+
 					if _my_health{ draw_rectangle(_x2, _y2, _mainBarWidth, _barHeight, false); }
 					
 					//Health bar brittle
-					draw_set_alpha(0.5);
+					var col2 = merge_colour(make_colour_hsv(colour_get_hue(col), colour_get_saturation(col) * 0.85, colour_get_value(col) * 0.45), $6D4536, 0.25);
+					draw_set_color(_player.flash ? c_white : col2);
+					
 					draw_rectangle(_mainBarWidth + 1, _y2, _brittleBarWidth + _mainBarWidth - _x2, _barHeight, false);
 					
 					//Waves
 					if _brittle_health{ draw_sprite_ext(global.sprWaveBig, 0.4 * current_frame, _mainBarWidth + 1, _y2, image_xscale, image_yscale, image_angle, _player.flash ? c_white : player_get_color(_hudIndex), image_alpha); }
-					if (_my_health < _maxhealth){ draw_sprite_ext(global.sprWaveBig, 0.4 * (current_frame + 4), _brittleBarWidth + _mainBarWidth - _x2 + 1, _y2, image_xscale, image_yscale, image_angle, _player.flash ? c_white : player_get_color(_hudIndex), 0.5); }
+					if (_my_health < _maxhealth){ draw_sprite_ext(global.sprWaveBig, 0.4 * (current_frame + 4), _brittleBarWidth + _mainBarWidth - _x2 + 1, _y2, image_xscale, image_yscale, image_angle, _player.flash ? c_white : col2, image_alpha); }
 					
 					//Text
 					draw_set_alpha(1);

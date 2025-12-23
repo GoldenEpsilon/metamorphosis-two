@@ -1,7 +1,7 @@
 #define init
 	//Sprites
 	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
-	global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  9,  9);
+	global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
 	
 	//Sounds
 	global.sndSkillSlct = sound_add("sounds/sndSkill" + string_upper(string(mod_current)) + ".ogg");
@@ -22,7 +22,7 @@
 
 #define step
 	with(instances_matching_le(enemy, "my_health", 0)){
-		if chance(1, 4) && !enemy_boss{
+		if chance(1, 4) && !enemy_boss && object_index != InvSpider{
 			repeat (2){
 				with(instance_copy(false)){
 					with(variable_instance_get_names(self)){
