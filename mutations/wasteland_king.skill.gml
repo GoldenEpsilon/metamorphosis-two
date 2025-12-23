@@ -263,7 +263,7 @@
 
 #define wk_rebel_brittle_grant
 	with(instances_matching(Player, "race", "rebel")){
-        brittle_health = 2;
+        brittle_health = 2 + (skill_get(mod_current) - 1);
         lstbrittle_health = brittle_health;
         
     	pass_health = my_health;
