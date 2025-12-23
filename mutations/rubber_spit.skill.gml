@@ -25,22 +25,11 @@
     }
     
     //Modded setup
-    //Rockets
-    with(instances_matching(instances_matching(instances_matching(CustomProjectile, "is_rocket", true), "rubber_wallbounce", undefined), "team", 2)){
-    	rubber_wallbounce = 2;
-    	rubber_dofx = true;
-    }
-    
-	//Grenades
-    with(instances_matching(instances_matching(instances_matching(CustomProjectile, "is_grenade", true), "rubber_wallbounce", undefined), "team", 2)){
-    	rubber_wallbounce = 4;
-    	rubber_dofx = true;
-    }
-    
-    //Flames
-    with(instances_matching(instances_matching(instances_matching(CustomProjectile, "is_flame", true), "rubber_wallbounce", undefined), "team", 2)){
-    	rubber_wallbounce = 4;
-    	rubber_dofx = false;
+    with(instances_matching(instances_matching(instances_matching(CustomProjectile, "ammo_type", 4), "rubber_wallbounce", undefined), "team", 2)){
+    	if !is_explosion && !is_meat_explosion{
+    		rubber_wallbounce = is_rocket ? 2 : 4;
+    		rubber_dofx = is_flame ? false : true;
+    	}
     }
     
     //Bounce logic
