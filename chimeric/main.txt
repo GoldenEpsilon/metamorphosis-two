@@ -1,1 +1,2 @@
 /loadskill weird_science
+/loadmod chimeric_handler

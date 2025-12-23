@@ -25,7 +25,7 @@
             alarm0 *= 3;
         }
         
-        if(!instance_is(self, Rad) and !instance_is(self, BigRad) and alarm0 > frigid_breath and chance_ct(1, 4)) {
+        if(object_index != Rad and object_index != BigRad and alarm0 > frigid_breath and chance_ct(1, 4)) {
             with(instance_create(x + orandom(3), y - random(6), Breath)) {
                 depth = 0;
                 image_angle = random(360);

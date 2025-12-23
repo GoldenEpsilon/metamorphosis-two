@@ -6,12 +6,14 @@
 	//Sounds
 	global.sndSkillSlct = sound_add("sounds/sndSkill" + string_upper(string(mod_current)) + ".ogg");
 
-#define skill_name    return "WEIRD SCIENCE";
-#define skill_text    return "@sENEMIES SOMETIMES @wSPLIT#IN TWO@s ON DEATH";
-#define skill_tip     return "IT'S ALIVE";
-#define skill_icon    return global.sprSkillHUD;
-#define skill_button  sprite_index = global.sprSkillIcon;
-#define skill_type    return "chimeric";
+#define skill_name  	return "WEIRD SCIENCE";
+#define skill_text  	return "@sENEMIES SOMETIMES @wSPLIT#IN TWO@s ON DEATH";
+#define skill_tip   	return "IT'S ALIVE";
+#define skill_icon  	return global.sprSkillHUD;
+#define skill_button	sprite_index = global.sprSkillIcon;
+#define skill_type  	return "chimeric";
+#define skill_avail		return false;
+#define skill_chimeric	return true;
 #define skill_take    
 	if(array_length(instances_matching(mutbutton, "skill", mod_current)) > 0) {
 		sound_play(sndMut);
