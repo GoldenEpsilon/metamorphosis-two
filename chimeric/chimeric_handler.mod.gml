@@ -31,7 +31,7 @@
 	    
 	    if(lstlevel != level) {
 	        if(lstlevel < level) {
-	            if(level <= 10) {
+	            if(level >= 10 and lstlevel < 10) {
 	                 // Increase the chance of chimeric mutations appearing when you hit level ultra:
 	                global.chimeric_chance += 30;
 	            }
