@@ -1,2 +1,4 @@
 /loadskill weird_science
+/loadskill scar_tissue
+
 /loadmod chimeric_handler

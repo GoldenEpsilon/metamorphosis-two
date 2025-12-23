@@ -8,7 +8,7 @@
 
 #define skill_name  	return "WEIRD SCIENCE";
 #define skill_text  	return "@sENEMIES SOMETIMES @wSPLIT#IN TWO@s ON DEATH";
-#define skill_tip   	return "IT'S ALIVE";
+#define skill_tip   	return "IT'S ALIVE!";
 #define skill_icon  	return global.sprSkillHUD;
 #define skill_button	sprite_index = global.sprSkillIcon;
 #define skill_type  	return "chimeric";
