@@ -105,7 +105,7 @@ with(instances_matching(SkillIcon, "chimeric", true)){
 	
 #define game_start
      // Reset chance for chimeric mutations to spawn:
-    global.chimeric_chance = 100;
+    global.chimeric_chance = 10;
 
      // Find all available chimeric mutations and collect them in an array:
     var _mod = mod_get_names("skill"),
