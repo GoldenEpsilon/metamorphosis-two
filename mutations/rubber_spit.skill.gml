@@ -32,17 +32,21 @@
     	}
     }
     
-    //Bounce logic
+	//Bounce logic
     with instances_matching(instances_matching_ge(projectile, "rubber_wallbounce", 1), "team", 2){
         if(place_meeting(x + hspeed_raw, y + vspeed_raw, Wall)){
             if rubber_dofx{
             	sound_play_pitch(sndGrenadeHitWall, 1 + orandom(0.1))
             	sound_play_pitch(sndLaserCrystalHit, 0.5 + orandom(0.1));
             
-				repeat(random_range(10, 15)) instance_create(x, y, Sweat)
+				repeat(random_range(10, 15)) instance_create(x, y, Sweat);
 				
 				with(instance_create(x, y, ImpactWrists)){ image_speed = 0.8; image_index = 2 }
         	}
+            
+            var _extra_bounce_timer = 10 * current_time_scale;
+            if alarm0 alarm0 += _extra_bounce_timer;
+            if "arlm0" in self && alrm0 alrm0 += _extra_bounce_timer;
             
             sleep(1);
             move_bounce_solid(true);

@@ -38,6 +38,7 @@
 					
 					my_health = maxhealth;
 					raddrop = 0;
+					kills = 0;
 				}
 			}
 			
