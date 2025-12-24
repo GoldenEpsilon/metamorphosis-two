@@ -12,11 +12,12 @@ for(var i = 0; i < 256; i++) {
 
 //VARIABLES FOR TWEAKING
 global.multi_object = false;
-global.surface_size_x = 24;
-global.surface_size_y = 32;
-global.surface_mult = 4;
-global.perlin_mult = 0.01 * 1;
-global.size = 2 * global.surface_mult;
+global.surface_size_x = 26;
+global.surface_size_y = 34;
+global.surface_mult = 1;
+global.perlin_mult = 0.01 * 4;
+global.size = 5 * global.surface_mult;
+
 global.surface = surface_create(global.surface_size_x * global.surface_mult, global.surface_size_y * global.surface_mult);
 
 #define step
@@ -26,15 +27,15 @@ surface_set_target(global.surface);
 draw_clear(c_black);
 
 draw_set_blend_mode(bm_add);
-for(var x = 0; x < global.surface_size_x * global.surface_mult; x+=global.size) {
-    for(var y = 0; y < global.surface_size_y * global.surface_mult; y+=global.size) {
+for(var x = -global.size; x < global.surface_size_x * global.surface_mult + global.size; x+=global.size) {
+    for(var y = -global.size; y < global.surface_size_y * global.surface_mult + global.size; y+=global.size) {
         // var val = ((perlin(x * 0.01, y * 0.01)) + 1) / 2;
-        var val = ((perlin3d((x/global.surface_mult) * global.perlin_mult, (y/global.surface_mult) * global.perlin_mult, current_frame/60)) + 1) % 1;
+        var val = ((perlin3d(((x+global.size)/global.surface_mult) * global.perlin_mult, ((y+global.size)/global.surface_mult) * global.perlin_mult, current_frame/60)) + 1) % 1;
         draw_set_color(make_color_hsv(val*255, 255, 65))
 
 
         if(global.multi_object){
-            var val2 = clamp(((perlin3d(100+(x/global.surface_mult) * global.perlin_mult, 100+(y/global.surface_mult) * global.perlin_mult, 100+current_frame/60)) + 1), 0, 2) % 1;
+            var val2 = clamp(((perlin3d(100+((x+global.size)/global.surface_mult) * global.perlin_mult, 100+((y+global.size)/global.surface_mult) * global.perlin_mult, 100+current_frame/60)) + 1), 0, 2) % 1;
 
             switch(floor(val2*12) % 6){
                 case 0:

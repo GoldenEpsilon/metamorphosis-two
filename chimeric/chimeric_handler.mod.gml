@@ -88,6 +88,9 @@
 	               }
 	           }
 	        }
+			with(global.drawscr){
+				instance_destroy()
+			}
 	    }
 	}
 
@@ -97,10 +100,14 @@
 	
 #define draw_chimeric
 with(instances_matching(SkillIcon, "chimeric", true)){
-	draw_surface_part_ext(mod_variable_get("mod", "chimeric_visuals", "surface"), 0, 0, 24*4, 32*4, x-12, y-16 + (addy == 2 ? 0 : -1), 0.25, 0.25, addy == 2 ? c_gray : c_white, 1);
-	draw_set_alpha(0.5);
-	draw_sprite(global.sprChimeric, 0, x, y + (addy == 2 ? 0 : -1));
-	draw_set_alpha(1);
+	var mult = mod_variable_get("mod", "chimeric_visuals", "surface_mult");
+	draw_surface_part_ext(mod_variable_get("mod", "chimeric_visuals", "surface"), 
+		0, 0, mod_variable_get("mod", "chimeric_visuals", "surface_size_x")*mult, mod_variable_get("mod", "chimeric_visuals", "surface_size_y")*mult, 
+		x-mod_variable_get("mod", "chimeric_visuals", "surface_size_x")/2, y-mod_variable_get("mod", "chimeric_visuals", "surface_size_y")/2 + (addy == 2 ? 0 : -1), 
+		1/mult, 1/mult, addy == 2 ? c_gray : c_white, 1);
+	// draw_set_alpha(0.5);
+	// draw_sprite(global.sprChimeric, 0, x, y + (addy == 2 ? 0 : -1));
+	// draw_set_alpha(1);
 }
 	
 #define game_start
