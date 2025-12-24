@@ -2,3 +2,4 @@
 /loadskill scar_tissue
 
 /loadmod chimeric_handler
+/loadmod chimeric_visuals

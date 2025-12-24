@@ -1,4 +1,6 @@
 #define init
+	global.sprChimeric = sprite_add("sprites/select/sprChimeric.png", 1, 12, 16);
+
     global.chimeric_chance      = 10;
     global.chimeric_mutations   = [];
     
@@ -13,6 +15,8 @@
 			array_push(global.chimeric_mutations, _mod[i]);
 		}
 	}
+
+	global.drawscr = noone;
 	
 #define step
     if(instance_exists(GenCont) || instance_exists(Menu)){
@@ -71,9 +75,10 @@
 	            
 	           if(array_length(_avail)) {
 	               with(instances_matching(SkillIcon, "num", _choice)) {
-	                   skill   = _avail[irandom(array_length(_avail) - 1)];
-	                   name    = skill_get_name(skill);
-	                   text    = skill_get_text(skill);
+	                   skill    = _avail[irandom(array_length(_avail) - 1)];
+	                   name     = skill_get_name(skill);
+	                   text     = skill_get_text(skill);
+					   chimeric = true;
 	                   if(is_string(skill)) mod_script_call("skill", skill, "skill_button");
 	                   else {
 	                       sprite_index = sprSkillIcon;
@@ -85,11 +90,22 @@
 	        }
 	    }
 	}
+
+	if(global.drawscr == noone || !instance_exists(global.drawscr)){
+		global.drawscr = script_bind_draw(draw_chimeric, -1001);
+	}
 	
+#define draw_chimeric
+with(instances_matching(SkillIcon, "chimeric", true)){
+	draw_surface_part_ext(mod_variable_get("mod", "chimeric_visuals", "surface"), 0, 0, 24*4, 32*4, x-12, y-16 + (addy == 2 ? 0 : -1), 0.25, 0.25, addy == 2 ? c_gray : c_white, 1);
+	draw_set_alpha(0.5);
+	draw_sprite(global.sprChimeric, 0, x, y + (addy == 2 ? 0 : -1));
+	draw_set_alpha(1);
+}
 	
 #define game_start
      // Reset chance for chimeric mutations to spawn:
-    global.chimeric_chance = 10;
+    global.chimeric_chance = 100;
 
      // Find all available chimeric mutations and collect them in an array:
     var _mod = mod_get_names("skill"),
