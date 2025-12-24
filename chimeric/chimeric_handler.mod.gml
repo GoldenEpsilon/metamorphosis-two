@@ -99,6 +99,9 @@
 	}
 	
 #define draw_chimeric
+if(array_length(instances_matching(SkillIcon, "chimeric", true)) > 0){
+	mod_script_call("mod", "chimeric_visuals", "draw_chimeric");
+}
 with(instances_matching(SkillIcon, "chimeric", true)){
 	var mult = mod_variable_get("mod", "chimeric_visuals", "surface_mult");
 	draw_surface_part_ext(mod_variable_get("mod", "chimeric_visuals", "surface"), 

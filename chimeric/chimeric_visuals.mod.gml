@@ -20,7 +20,7 @@ global.size = 5 * global.surface_mult;
 
 global.surface = surface_create(global.surface_size_x * global.surface_mult, global.surface_size_y * global.surface_mult);
 
-#define step
+#define draw_chimeric
 // trace_time();
 
 surface_set_target(global.surface);
