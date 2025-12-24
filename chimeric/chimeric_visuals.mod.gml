@@ -21,7 +21,7 @@ global.size = 5 * global.surface_mult;
 global.surface = surface_create(global.surface_size_x * global.surface_mult, global.surface_size_y * global.surface_mult);
 
 #define draw_chimeric
-trace_time();
+// trace_time();
 
 surface_set_target(global.surface);
 draw_clear(c_black);
@@ -51,7 +51,7 @@ for(var x = -size/2; x < global.surface_size_x * surface_mult+size/2; x+=size) {
 draw_set_blend_mode(bm_normal);
 draw_set_alpha(1)
 surface_reset_target();
-trace_time("chimeric draw");
+// trace_time("chimeric draw");
 
 // #define draw_gui
 // draw_surface_stretched(global.surface, 100, 100, 100, 100);
