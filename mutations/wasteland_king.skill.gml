@@ -13,7 +13,7 @@
 	*/
 	
 	global.newLevel = false;
-	
+
 #macro yv_max_preload		3 
 
 #define skill_name    return "WASTELAND KING";
@@ -110,6 +110,71 @@
 				break;
 				
 			case "crystal":
+				with(instances_matching(Player, "race", "crystal")) {
+					//initialize
+					if "wk_initialized" not in self {
+						wk_initialized = ":3";
+						
+						wk_crystal_orbitals = [];
+						wk_orbital_rotation = 0;
+						wk_orbital_timer = 20;
+						wk_orbital_tmax = 100;
+						wk_track_hp = my_health;
+						wk_burst_hp = -1;
+					}
+					
+					//track HP loss and reset orbital timer, also destroy orbitals
+					if wk_track_hp > my_health {
+						repeat wk_track_hp - my_health {
+							if array_length(wk_crystal_orbitals) == 0 break;
+							var inst = wk_crystal_orbitals[@0];
+							if instance_exists(inst) {
+								//NOTE: There is code to make orbitals take 2HP worth of damage before breaking.
+								//I removed it because it felt low impact, but it can be added back as needed.
+								with inst { 
+									if 0 { //!inst.damaged {
+										inst.damaged = true;
+										repeat 4 with instance_create(inst.x,inst.y,PlasmaTrail) {
+										sprite_index = sprLaserCharge;
+										image_speed += random(0.6);
+											motion_add(irandom(360),2 + random(3));
+										}
+										sound_play_pitchvol(sndLaserCrystalHit,1.3 + random(0.1),0.6);
+										view_shake_at(inst.x,inst.y,7);
+									}
+									else {
+										instance_destroy();
+										array_shift(other.wk_crystal_orbitals);
+									}
+								}
+							}
+						}
+						wk_orbital_timer = wk_orbital_tmax;
+					}
+					wk_track_hp = my_health;
+					
+					//remove dead orbitals
+					wk_crystal_orbitals = array_prune(wk_crystal_orbitals);
+					
+					//increment rotation: orbitals rotate faster when you move faster cause its awesome
+					wk_orbital_rotation += current_time_scale * (2 * speed + 3);
+					
+					//spawn new orbitals
+					if array_length(wk_crystal_orbitals) < 4 * skill_get(mod_current) {
+						wk_orbital_timer -= current_time_scale;
+						if wk_orbital_timer <= 0 {
+							wk_orbital_timer = wk_orbital_tmax/4;
+							with wk_crystal_orbital_create(x,y) {
+								creator 	= other;
+								team		= other.team;
+								array_push(other.wk_crystal_orbitals,self);
+							}
+							
+							sound_play_pitchvol(sndCrystalShield,1.3 + array_length(wk_crystal_orbitals) * 0.2,0.4);
+							sound_play_pitchvol(sndCrystalRicochet,1.3 + array_length(wk_crystal_orbitals) * 0.2,0.4);
+						}
+					}
+				}
 				break;
 				
 			case "eyes":
@@ -121,7 +186,9 @@
 			case "venuz":
 				with(instances_matching(Player, "race", "venuz")) {
 					//initialize
-					if "wk_yv_preload" not in self {
+					if "wk_initialized" not in self {
+						wk_initialized = ">:#";
+						
 						wk_yv_preload = 0;
 						wk_yv_draw = noone;
 					}
@@ -170,6 +237,11 @@
 			case "rebel":
 				if(instance_exists(GenCont)) global.newLevel = true;
 				
+				/* Dragonstrive here:
+					I'm making a note of this for later. It's fine *now*, 
+					but if more races end up needing script binds or level starts,
+					I'm gonna probably modularize this so it's easier to expand on.
+				*/
 				else if(global.newLevel){
 					global.newLevel = false;
 					wk_level_start("rebel");
@@ -177,17 +249,36 @@
 				
 				with(instances_matching(Player, "race", "rebel")){
 					//initialize
-					if "wk_rebel_preload" not in self {
-						wk_rebel_preload = 0;
-						wk_begin_step_object = noone;
+					if "wk_initialized" not in self {
+						wk_initialized = ";)";
+						
+						wk_begin_step_object	= noone;
+						brittle_health			= 0;
+						pass_health 			= my_health;
 					}
-					
-					//begin step controller
-					if !instance_exists(wk_begin_step_object) {
-						with script_bind_draw(wk_begin_step, 0, self) other.wk_begin_step_object = self;
+				
+					if brittle_health > 0 {
+						if my_health != pass_health{
+							if my_health < pass_health{
+								flash = true;
+								
+								if !button_check(index, "spec"){
+									var _damage = pass_health - my_health,
+										_last_brittle_health = brittle_health;
+									
+									//Reset damage taken
+									my_health = pass_health;
+									
+									//Subtract relevant brittle health
+									brittle_health = max(brittle_health - _damage, 0);
+									
+									//If brittle health all gone, do remainder of proper damage
+									if brittle_health <= 0 my_health -= _damage - _last_brittle_health;
+								}
+							}
+							pass_health = my_health;
+						}
 					}
-					
-					if "brittle_health" not in self brittle_health = 0;
 				}
 			break;
 				
@@ -217,47 +308,113 @@
 			break;
 		}
 	}
+#define wk_crystal_orbital_create(xx,yy)
+	with instance_create(xx,yy,CustomObject) {
+		sprite_index	= sprFlakBullet;
+		orbitspeed		= 3; //in degrees
+		orbitrad		= 32; //in pixels
+		orbitlerp		= 0.20;
+		rot				= GameCont.timer;
+		goalx			= xx;
+		goaly			= yy;
+		team			= -1;
+		targetrad		= 250;
+		damaged			= false;
+		on_step 		= script_ref_create(crystal_orbital_step);
+		on_destroy		= script_ref_create(crystal_orbital_destroy);
+		
+		return self;
+	}
 
+#define crystal_orbital_step	
+	if !instance_exists(creator) {
+		instance_destroy();
+		exit;
+	}
+	
+	var num = array_length(creator.wk_crystal_orbitals);
+	var	ind = array_find_index(creator.wk_crystal_orbitals,self);
+	var	off = 360/num * ind;
+	var	ang = creator.wk_orbital_rotation + off;  
+	var	gol = collision_line_point(
+			creator.x,
+			creator.y,
+			creator.x + lengthdir_x(orbitrad - creator.speed * 3,ang),
+			creator.y + lengthdir_y(orbitrad - creator.speed * 3,ang),
+			Wall,
+			false,
+			true
+		);
+		
+		x = lerp(x,gol.x,orbitlerp);
+		y = lerp(y,gol.y,orbitlerp);
+	
+	//target tracking move to distroy
+
+
+//DEV
+//REMOVE THESE WHEN BEA MAKES PROPER SPRITES;
+	image_xscale = 0.4;
+	image_yscale = 0.4;
+	switch ind {
+		case 0: image_blend = c_red; break;
+		case 1: image_blend = c_orange; break;
+		case 2: image_blend = c_yellow; break;
+		case 3: image_blend = c_green; break;
+	}
+	
+	if damaged {
+		x += orandom(2);
+		y += orandom(2);
+		with instance_create(x,y,Smoke) {
+			image_xscale = 0.15;
+			image_yscale = 0.15;
+		}
+	}
+	
+
+#define crystal_orbital_destroy
+	var targets = instances_in_circle(instances_matching_ne([enemy,Player],"team",team),x,y,targetrad);
+	var	nearest = noone;
+	var	ndist	= infinity;
+
+	with targets {
+		if collision_line(other.x,other.y,x,y,Wall,false,true) continue; //line of sight
+		var d = point_distance(other.x,other.y,x,y);
+		if d < ndist {
+			nearest = self;
+			ndist	= d;
+		}
+	}
+	
+	with instance_create(x,y,EnemyLaser){
+		creator 		= other.creator;
+		team			= other.team;
+		direction		= instance_exists(nearest) ? point_direction(other.x,other.y,nearest.x,nearest.y) : random(360);
+		image_angle 	= direction;
+		image_yscale	*= 1.5;
+		alarm0			= 1;
+		damage			= 5;
+	}
+	
+	view_shake_at(x,y,15);
+	
+	sound_play_pitchvol(sndHyperCrystalHurt,1.4 + random(0.15),0.8);
+	sound_play_pitchvol(sndLaserCrystalDeath,1.2 + random(0.1),0.5);
+	sound_play_pitchvol(sndLaser,0.6 + random(0.1),1);
+	sound_play_pitchvol(sndWallBreakCrystal,2.5 + random(0.2),0.6);
+	
+	repeat 8 with instance_create(x,y,PlasmaTrail) {
+		sprite_index = sprLaserCharge;
+		image_speed += random(0.6);
+		motion_add(irandom(360),0.5 + random(4));
+	}
+
+#define crystal_orbital_cleanup
 #define wk_level_start(race)
 	switch(race){
 		case "rebel":
 			wk_rebel_brittle_grant();
-			break;
-	}
-
-#define wk_begin_step(_inst)
-	if !instance_exists(_inst) {
-		instance_destroy();
-		exit;
-	}
-
-	switch(_inst.race){
-		case "rebel":
-			with(_inst){
-				if brittle_health > 0{
-					if my_health != pass_health{
-						if my_health < pass_health{
-							flash = true;
-							
-							if !button_check(index, "spec"){
-								var _damage = pass_health - my_health,
-									_last_brittle_health = brittle_health;
-								
-								//Reset damage taken
-								my_health = pass_health;
-								
-								//Subtract relevant brittle health
-								brittle_health = max(brittle_health - _damage, 0);
-								
-								//If brittle health all gone, do remainder of proper damage
-								if brittle_health <= 0 my_health -= _damage - _last_brittle_health;
-							}
-						}
-						
-						pass_health = my_health;
-					}
-				}
-			}
 			break;
 	}
 
@@ -341,3 +498,4 @@
 #define orandom(n)                      return random_range(-n,n);
 #define chance(_numer,_denom)           return random(_denom) < _numer;
 #define chance_ct(_numer,_denom)        return random(_denom) < _numer * current_time_scale;
+#define array_prune(_array)				return instances_matching_ne(_array, "id"); //prunes nonexistant instances from an array;
