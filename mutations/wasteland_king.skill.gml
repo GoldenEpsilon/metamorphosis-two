@@ -118,7 +118,7 @@
 						wk_crystal_orbitals = [];
 						wk_orbital_rotation = 0;
 						wk_orbital_timer = 20;
-						wk_orbital_tmax = 100;
+						wk_orbital_tmax = 275;
 						wk_track_hp = my_health;
 						wk_burst_hp = -1;
 					}
@@ -160,10 +160,10 @@
 					wk_orbital_rotation += current_time_scale * (2 * speed + 3);
 					
 					//spawn new orbitals
-					if array_length(wk_crystal_orbitals) < 4 * skill_get(mod_current) {
+					if array_length(wk_crystal_orbitals) < 3 * skill_get(mod_current) {
 						wk_orbital_timer -= current_time_scale;
 						if wk_orbital_timer <= 0 {
-							wk_orbital_timer = wk_orbital_tmax/4;
+							wk_orbital_timer = 50;
 							with wk_crystal_orbital_create(x,y) {
 								creator 	= other;
 								team		= other.team;

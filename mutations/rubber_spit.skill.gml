@@ -44,7 +44,7 @@
 				with(instance_create(x, y, ImpactWrists)){ image_speed = 0.8; image_index = 2 }
         	}
             
-            var _extra_bounce_timer = 10 * current_time_scale;
+            var _extra_bounce_timer = 5 * current_time_scale;
             if alarm0 alarm0 += _extra_bounce_timer;
             if "arlm0" in self && alrm0 alrm0 += _extra_bounce_timer;
             
