@@ -1,5 +1,5 @@
 /loadskill weird_science
-/loadskill scar_tissue
+/loadskill decaying_flesh
 
 /loadmod chimeric_handler
 /loadmod chimeric_visuals

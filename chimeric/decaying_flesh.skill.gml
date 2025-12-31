@@ -6,9 +6,9 @@
 	//Sounds
 	global.sndSkillSlct = sound_add("sounds/sndSkill" + string_upper(string(mod_current)) + ".ogg");
 
-#define skill_name  	return "SCAR TISSUE";
-#define skill_text  	return "DOUBLED @rHEALING@s#@rHEAL@s OVER TIME";
-#define skill_tip   	return "TAKE IT";
+#define skill_name  	return "DECAYING FLESH";
+#define skill_text  	return "@sALL @rHEALTH@s CHANGES#@wHAPPEN OVER TIME";
+#define skill_tip   	return "A HORRIBLE AFFLICTION";
 #define skill_icon  	return global.sprSkillHUD;
 #define skill_button	sprite_index = global.sprSkillIcon;
 #define skill_type  	return "chimeric";
@@ -24,18 +24,55 @@
 	with(Player) {
 		if("scartissue" not in self) scartissue = my_health;
 		
-		if(scartissue != my_health) {
-			if(instance_exists(enemy) and scartissue < my_health) {
-				var healamt = my_health - scartissue;
+		if my_health != scartissue{
+			 // Damage:
+			if my_health < scartissue{
+				var _damage = (scartissue - my_health);
 				
-				my_health -= healamt;
+				 //Reset damage taken:
+				my_health += _damage;
 				
-				if(fork()) {
-					repeat(healamt * 2) {
-						wait 45;
-						if(instance_exists(self)) {
-							my_health += min(1, maxhealth - my_health);
+				if(fork()){
+					lsthealth = my_health;
+					
+					repeat(_damage){
+						wait 30;
+						
+						if instance_exists(self){
+							my_health = max(0, my_health - 1);
 							scartissue = my_health;
+							
+							 // VFX:
+							sound_play_pitchvol(snd_hurt, 0.8, 0.5);
+							sound_play_pitch(sndMaggotSpawnDie, 1.8 + random(0.2));
+							
+							with(instance_create(x, y, BloodStreak)) {
+								image_xscale = 0.40;
+								image_yscale = 0.75;
+							}
+						}
+					}
+					
+					exit;
+				}
+			}
+			
+			 // Healing:
+			if my_health > scartissue{
+				var _healing = (my_health - scartissue);
+				
+				 //Reset healing done:
+				my_health -= _healing;
+				
+				if(fork()){
+					repeat(_healing){
+						wait 40;
+						
+						if instance_exists(self){
+							my_health = min(my_health + 1, maxhealth);
+							scartissue = my_health;
+							
+							 // VFX:
 							sound_play_pitch(sndHPPickup, 1.7 + random(0.1));
 							sound_play_pitch(sndMaggotSpawnDie, 1.8 + random(0.2));
 							
@@ -53,56 +90,3 @@
 			scartissue = my_health;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
