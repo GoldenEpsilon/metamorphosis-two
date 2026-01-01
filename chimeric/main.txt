@@ -1,5 +1,5 @@
 /loadskill weird_science
-/loadskill decaying_flesh
+/loadskill molten_flesh
 
 /loadmod chimeric_handler
 /loadmod chimeric_visuals

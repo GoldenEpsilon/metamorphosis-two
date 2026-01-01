@@ -6,7 +6,7 @@
 	//Sounds
 	global.sndSkillSlct = sound_add("sounds/sndSkill" + string_upper(string(mod_current)) + ".ogg");
 
-#define skill_name  	return "DECAYING FLESH";
+#define skill_name  	return "MOLTEN FLESH";
 #define skill_text  	return "@sALL @rHEALTH@s CHANGES#@wHAPPEN OVER TIME";
 #define skill_tip   	return "A HORRIBLE AFFLICTION";
 #define skill_icon  	return global.sprSkillHUD;
@@ -22,12 +22,12 @@
 
 #define step
 	with(Player) {
-		if("scartissue" not in self) scartissue = my_health;
+		if("moltenflesh" not in self) moltenflesh = my_health;
 		
-		if my_health != scartissue{
+		if my_health != moltenflesh{
 			 // Damage:
-			if my_health < scartissue{
-				var _damage = (scartissue - my_health);
+			if my_health < moltenflesh{
+				var _damage = (moltenflesh - my_health);
 				
 				 //Reset damage taken:
 				my_health += _damage;
@@ -40,7 +40,7 @@
 						
 						if instance_exists(self){
 							my_health = max(0, my_health - 1);
-							scartissue = my_health;
+							moltenflesh = my_health;
 							
 							 // VFX:
 							sound_play_pitchvol(snd_hurt, 0.8, 0.5);
@@ -58,8 +58,8 @@
 			}
 			
 			 // Healing:
-			if my_health > scartissue{
-				var _healing = (my_health - scartissue);
+			if my_health > moltenflesh{
+				var _healing = (my_health - moltenflesh);
 				
 				 //Reset healing done:
 				my_health -= _healing;
@@ -70,7 +70,7 @@
 						
 						if instance_exists(self){
 							my_health = min(my_health + 1, maxhealth);
-							scartissue = my_health;
+							moltenflesh = my_health;
 							
 							 // VFX:
 							sound_play_pitch(sndHPPickup, 1.7 + random(0.1));
@@ -87,6 +87,6 @@
 				}
 			}
 			
-			scartissue = my_health;
+			moltenflesh = my_health;
 		}
 	}
