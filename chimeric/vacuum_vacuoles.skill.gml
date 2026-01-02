@@ -4,7 +4,8 @@
 
 	global.sndSkillSlct = sound_add("../sounds/Cursed/sndCurse" + string_upper(string(mod_current)) + ".ogg");
 
-	#macro atract_rad 28
+#macro attract_range 56
+
 #define skill_name    return "VACUUM VACUOLES";
 #define skill_text    return "@rALL@s PROJECTILES ARE @wHOMING";
 #define skill_tip     return "BOTTOMLESS SOUL";
@@ -19,15 +20,26 @@
 	}
 
 #define step
-	with(instances_matching([Player,enemy],"",null)) {
-		var i = instances_in_circle(instances_matching_ne(projectile,"team",team),x,y,atract_rad * skill_get(mod_current));
-		if array_length(i) with i {
-			var lstspd = speed;
-			var rotate = (image_angle ==  direction);
-			motion_add(point_direction(x, y, other.x, other.y), speed * 0.2);
-			speed = lstspd;
-			if rotate image_angle = direction;
-			image_blend = c_red //for testing purposes
+	if instance_exists(hitme) {
+		with instances_matching_ne(instances_matching_gt(projectile,"speed",0),"ammo_type",-1) {
+			var nearest = instance_nearest_from(x,y,instances_in_circle(instances_matching_ne([Player,enemy],"team",team),x,y,attract_range * skill_get(mod_current)));
+			if instance_exists(nearest) {
+				var rotate = (image_angle == direction);
+				var _dir = point_direction(x,y,nearest.x,nearest.y)
+				if(abs(angle_difference(_dir, direction)) <= current_time_scale*10){
+					direction = _dir;
+					image_angle = _dir;
+				}
+				else if(angle_difference(_dir, direction) > 0){
+					direction+=current_time_scale*speed*skill_get(mod_current);
+					image_angle+=current_time_scale*speed*skill_get(mod_current);
+				}
+				else{
+					direction-=current_time_scale*speed*skill_get(mod_current);
+					image_angle-=current_time_scale*speed*skill_get(mod_current);
+				}
+				if rotate image_angle = direction;
+				image_blend = c_red //for testing purposes
+			}
 		}
 	}
-
