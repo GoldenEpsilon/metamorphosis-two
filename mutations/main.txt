@@ -1,5 +1,6 @@
 /loadskill frigid_breath
 /loadskill racing_thoughts
-/loadskill turtle_shell
+//loadskill turtle_shell
 /loadskill wasteland_king
 /loadskill rubber_spit
+//loadskill reactor_core

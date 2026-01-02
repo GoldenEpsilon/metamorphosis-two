@@ -1,7 +1,7 @@
 #define init
 	global.sprChimeric = sprite_add("sprites/select/sprChimeric.png", 1, 12, 16);
 
-    global.chimeric_chance      = 10;
+    global.chimeric_chance      = chimeric_start;
     global.chimeric_mutations   = [];
     
     global.level_start          = false;
@@ -17,6 +17,10 @@
 	}
 
 	global.drawscr = noone;
+
+#macro chimeric_start 5
+#macro chimeric_vault 25
+#macro chimeric_ultra 40
 	
 #define step
     if(instance_exists(GenCont) || instance_exists(Menu)){
@@ -26,7 +30,7 @@
 	    
 	    if(instance_exists(GameCont)) {
 	         // Increase the chance of chimeric mutations appearing if you visit a vault:
-	        if(GameCont.area = 100) global.chimeric_chance += 20;
+	        if(GameCont.area = 100) global.chimeric_chance += chimeric_vault;
 	    }
 	}
 	
@@ -37,12 +41,12 @@
 	        if(lstlevel < level) {
 	            if(level >= 10 and lstlevel < 10) {
 	                 // Increase the chance of chimeric mutations appearing when you hit level ultra:
-	                global.chimeric_chance += 30;
+	                global.chimeric_chance += chimeric_ultra;
 	            }
 	        } else {
 	            if(level < 10 and lstlevel >= 10) {
 	                 // Remove the chance for chimeric mutations if you lose level ultra somehow:
-	                global.chimeric_chance -= 30;
+	                global.chimeric_chance -= chimeric_ultra;
 	            }
 	        }
 	        
@@ -115,7 +119,7 @@ with(instances_matching(SkillIcon, "chimeric", true)){
 	
 #define game_start
      // Reset chance for chimeric mutations to spawn:
-    global.chimeric_chance = 10;
+    global.chimeric_chance = chimeric_start;
 
      // Find all available chimeric mutations and collect them in an array:
     var _mod = mod_get_names("skill"),
