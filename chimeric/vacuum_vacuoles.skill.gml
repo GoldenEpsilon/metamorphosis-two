@@ -32,13 +32,7 @@
 		}
 	}
 	trace_time("")
-
-#define vacuoles_homing()
-
-#define instance_rectangle(_x1, _y1, _x2, _y2, _obj)
-	/*
-		Returns all given instances with their coordinates touching a given rectangle
-		Much better performance than manually performing "point_in_rectangle()" with every instance
 	*/
 	
+
 	return instances_matching_le(instances_matching_ge(instances_matching_le(instances_matching_ge(_obj, "x", _x1), "x", _x2), "y", _y1), "y", _y2);
