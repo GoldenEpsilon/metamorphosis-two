@@ -19,7 +19,6 @@
 	}
 
 #define step
-	trace_time()
 	with(instances_matching([Player,enemy],"",null)) {
 		var i = instances_in_circle(instances_matching_ne(projectile,"team",team),x,y,atract_rad * skill_get(mod_current));
 		if array_length(i) with i {
@@ -31,8 +30,4 @@
 			image_blend = c_red //for testing purposes
 		}
 	}
-	trace_time("")
-	*/
-	
 
-	return instances_matching_le(instances_matching_ge(instances_matching_le(instances_matching_ge(_obj, "x", _x1), "x", _x2), "y", _y1), "y", _y2);
