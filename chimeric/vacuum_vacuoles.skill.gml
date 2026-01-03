@@ -24,21 +24,19 @@
 		with instances_matching_ne(instances_matching_gt(projectile,"speed",0),"ammo_type",-1) {
 			var nearest = instance_nearest_from(x,y,instances_in_circle(instances_matching_ne([Player,enemy],"team",team),x,y,attract_range * skill_get(mod_current)));
 			if instance_exists(nearest) {
-				var rotate = (image_angle == direction);
 				var _dir = point_direction(x,y,nearest.x,nearest.y)
 				if(abs(angle_difference(_dir, direction)) <= current_time_scale*10){
 					direction = _dir;
 					image_angle = _dir;
 				}
 				else if(angle_difference(_dir, direction) > 0){
-					direction+=current_time_scale*speed*skill_get(mod_current);
-					image_angle+=current_time_scale*speed*skill_get(mod_current);
+					direction+=current_time_scale*speed/2*skill_get(mod_current);
+					image_angle+=current_time_scale*speed/2*skill_get(mod_current);
 				}
 				else{
-					direction-=current_time_scale*speed*skill_get(mod_current);
-					image_angle-=current_time_scale*speed*skill_get(mod_current);
+					direction-=current_time_scale*speed/2*skill_get(mod_current);
+					image_angle-=current_time_scale*speed/2*skill_get(mod_current);
 				}
-				if rotate image_angle = direction;
 				image_blend = c_red //for testing purposes
 			}
 		}

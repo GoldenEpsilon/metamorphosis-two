@@ -36,7 +36,7 @@
 						}
 					}
 					
-					my_health = maxhealth;
+					my_health = ceil(maxhealth / 2);
 					raddrop = 0;
 					kills = 0;
 				}
