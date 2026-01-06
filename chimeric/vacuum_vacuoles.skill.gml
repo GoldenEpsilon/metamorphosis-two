@@ -1,15 +1,15 @@
 #define init
-	global.sprSkillIcon = sprite_add("../sprites/Icons/Cursed/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
-	global.sprSkillHUD  = sprite_add("../sprites/HUD/Cursed/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  9,  9);
+	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
+	global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  9,  9);
 
-	global.sndSkillSlct = sound_add("../sounds/Cursed/sndCurse" + string_upper(string(mod_current)) + ".ogg");
+	global.sndSkillSlct = sound_add("sounds/sndSkill" + string_upper(string(mod_current)) + ".ogg");
 
 #macro attract_range 56
 
 #define skill_name    return "VACUUM VACUOLES";
 #define skill_text    return "@rALL@s PROJECTILES ARE @wHOMING";
 #define skill_tip     return "BOTTOMLESS SOUL";
-#define skill_icon    return global.sprSkillHUD;
+//#define skill_icon    return global.sprSkillHUD;
 #define skill_button  sprite_index = global.sprSkillIcon;
 #define skill_avail		return false;
 #define skill_chimeric	return true;

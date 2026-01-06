@@ -1,6 +1,6 @@
 #define init
 	//Sprites
-	//global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
+	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
 	//global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
     
     global.level_start          = false;
@@ -9,7 +9,7 @@
 #define skill_text    return "@gRAD COMBO@s#@wBIG ENEMIES@s DROP @gMORE RADS@s";
 #define skill_ttip    return "uranium fever";
 //#define skill_icon    return global.sprSkillHUD;
-//#define skill_button  sprite_index = global.sprSkillIcon;
+#define skill_button  sprite_index = global.sprSkillIcon;
 #define skill_type	  return "offensive";
 #define skill_take    
 	if(array_length(instances_matching(mutbutton, "skill", mod_current)) > 0) {
