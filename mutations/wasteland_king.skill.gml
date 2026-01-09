@@ -51,11 +51,11 @@
 				case "eyes":     t += "@rNYI"; break;
 				case "melting":  t += "@rNYI"; break;
 				case "plant":    t += "@rNYI"; break;
-				case "venuz":    t += "@wPRE-LOAD @sUP TO THREE SHOTS#@sWHILE @wNOT FIRING"; break;
+				case "venuz":    t += "@wPRE-LOAD @sWHILE @wNOT FIRING"; break;
 				case "steroids": t += "@rNYI"; break;
 				case "robot":    t += "@rNYI"; break;
 				case "chicken":  t += "@rNYI"; break;
-				case "rebel":    t += "@sPORTALS GRANT @w2 @rBRITTLE HP@s"; break;
+				case "rebel":    t += "@sPORTALS GRANT @w2 @rBRITTLE HP"; break;
 				case "horror":   t += "@rNYI"; break;
 				case "rogue":    t += "@rNYI"; break;
 				case "skeleton": t += "@rNYI"; break;
