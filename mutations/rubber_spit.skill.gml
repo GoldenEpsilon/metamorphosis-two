@@ -13,8 +13,17 @@
 	if(array_length(instances_matching(mutbutton, "skill", mod_current)) > 0) {
 		sound_play(sndMut);
 	}
-    
+	
 #define step
+	if "rubber_initialized" not in self{
+		rubber_initialized = "<|:3"
+		
+		rubber_step_object = noone;
+	}
+	
+	if !instance_exists(rubber_step_object) with script_bind_step(rubber_step, depth) other.rubber_step_object = self;
+	
+#define rubber_step
 	//Vanilla setup
     with(instances_matching(instances_matching([Grenade, Rocket, Nuke, Flame, FlameBall], "rubber_wallbounce", undefined), "team", 2)){
     	var _is_grenade = object_index == Grenade or object_get_parent(self.object_index) == Grenade,
