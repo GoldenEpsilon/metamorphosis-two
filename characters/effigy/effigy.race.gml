@@ -1,7 +1,7 @@
 #define init
 	global.saves = {};
 	global.sprPortrait[0] = sprite_add("sprites/sprEFFIGYPortrait.png", 1, 30, 250);
-	global.sprIdle[0]     = sprite_add("sprites/sprEFFIGYIdle.png",   4, 24, 24);
+	global.sprIdle[0]     = sprite_add("sprites/sprEFFIGYIdle.png",   1, 16, 20);
 	global.sprWalk[0]     = sprite_add("sprites/sprEFFIGYWalk.png",   6, 24, 24);
 	global.sprHurt[0]     = sprite_add("sprites/sprEFFIGYHurt.png",   3, 24, 24);
 	global.sprDead[0]     = sprite_add("sprites/sprEFFIGYDead.png",   6, 24, 24);
@@ -27,23 +27,25 @@
 	global.sprUltraIcon   = sprite_add("sprites/sprUltraEFFIGYIcon.png",       3, 12, 16);
 	global.sprUltraHUD[0] = sprite_add("../sprites/sprUltraEIDOLONHUD.png",  1, 8, 8);
 	global.sprUltraHUD[1] = sprite_add("../sprites/sprUltraANATHEMAHUD.png", 1, 8, 8);
+	
+	global.sprParticle	  = sprite_add("sprites/sprEFFIGYParticle.png", 3, 1, 1);
 
     global.snd = {
-        "EffigyHurt"    : sound_add("sounds/Characters/Effigy/sndEffigyHurt.ogg");
-        "EffigyDead"    : sound_add("sounds/Characters/Effigy/sndEffigyDeath.ogg");
-        "EffigyLowHP"   : sound_add("sounds/Characters/Effigy/sndEffigyLowHP.ogg");
-        "EffigyLowAM"   : sound_add("sounds/Characters/Effigy/sndEffigyLowAmmo.ogg");
-        "EffigySelect"  : sound_add("sounds/Characters/Effigy/sndEffigySelect.ogg");
-        "EffigyConfirm" : sound_add("sounds/Characters/Effigy/sndEffigyConfirm.ogg");
-        "EffigyChest"   : sound_add("sounds/Characters/Effigy/sndEffigyChestWeapon.ogg");
-        "EffigyWorld"   : sound_add("sounds/Characters/Effigy/sndEffigyWorld.ogg");
-        "EffigyIDPD"    : sound_add("sounds/Characters/Effigy/sndEffigyIDPD.ogg");
-        "EffigyCaptain" : sound_add("sounds/Characters/Effigy/sndEffigyCaptain.ogg");
-        "EffigyThrone"  : sound_add("sounds/Characters/Effigy/sndEffigyThrone.ogg");
-        "EffigyVault"   : sound_add("sounds/Characters/Effigy/sndEffigyVault.ogg");
-        "EffigyUltraA"  : sound_add("sounds/Ultras/sndUltEIDOLON.ogg");
-        "EffigyUltraB"  : sound_add("sounds/Ultras/sndUltANATHEMA.ogg");
-        "EffigyUltraC"  : sound_add("sounds/Ultras/sndUltDisciple.ogg");
+        "EffigyHurt"    : sound_add("sounds/Characters/Effigy/sndEffigyHurt.ogg"),
+        "EffigyDead"    : sound_add("sounds/Characters/Effigy/sndEffigyDeath.ogg"),
+        "EffigyLowHP"   : sound_add("sounds/Characters/Effigy/sndEffigyLowHP.ogg"),
+        "EffigyLowAM"   : sound_add("sounds/Characters/Effigy/sndEffigyLowAmmo.ogg"),
+        "EffigySelect"  : sound_add("sounds/Characters/Effigy/sndEffigySelect.ogg"),
+        "EffigyConfirm" : sound_add("sounds/Characters/Effigy/sndEffigyConfirm.ogg"),
+        "EffigyChest"   : sound_add("sounds/Characters/Effigy/sndEffigyChestWeapon.ogg"),
+        "EffigyWorld"   : sound_add("sounds/Characters/Effigy/sndEffigyWorld.ogg"),
+        "EffigyIDPD"    : sound_add("sounds/Characters/Effigy/sndEffigyIDPD.ogg"),
+        "EffigyCaptain" : sound_add("sounds/Characters/Effigy/sndEffigyCaptain.ogg"),
+        "EffigyThrone"  : sound_add("sounds/Characters/Effigy/sndEffigyThrone.ogg"),
+        "EffigyVault"   : sound_add("sounds/Characters/Effigy/sndEffigyVault.ogg"),
+        "EffigyUltraA"  : sound_add("sounds/Ultras/sndUltEIDOLON.ogg"),
+        "EffigyUltraB"  : sound_add("sounds/Ultras/sndUltANATHEMA.ogg"),
+        "EffigyUltraC"  : sound_add("sounds/Ultras/sndUltDisciple.ogg"),
     }
 
 	 // Reapply sprites if the mod is reloaded. we should add this to our older race mods //
@@ -61,6 +63,7 @@
 
 #macro metacolor																`@(color:${make_color_rgb(110, 140, 110)})`
 #macro scr																		mod_variable_get("mod", "metamorphosis", "scr")
+#macro snd																		global.snd
 #macro call																		script_ref_call
 
 #define race_name              return "EFFIGY";
@@ -81,11 +84,16 @@
     }
     return `STARTS WITH@3(${skill_get_icon(mut1)[0]}:${skill_get_icon(mut1)[1]})AND@3(${skill_get_icon(mut2)[0]}:${skill_get_icon(mut2)[1]})##${metacolor}SACRIFICE@w MUTATIONS`;
 
+#define create
+	assign_sprites();
+
+#define step
+	if random(2) < 1 repeat(random_range(1, 3)) with(instance_create(Player.x + 4 * right, Player.y - 7, Curse)){ sprite_index = global.sprParticle; direction = random(360) image_speed = 0.4 }
 
 #define assign_sprites
 	if(object_index = Player) {
 		spr_idle = global.sprIdle[bskin];
-		spr_walk = global.sprWalk[bskin];
+		spr_walk = global.sprIdle[bskin];
 		spr_hurt = global.sprHurt[bskin];
 		spr_dead = global.sprDead[bskin];
 		spr_sit2 = global.sprSit[bskin];

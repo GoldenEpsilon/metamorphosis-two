@@ -3,4 +3,5 @@
 //loadskill turtle_shell
 /loadskill wasteland_king
 /loadskill rubber_spit
-//loadskill reactor_core
+/loadskill reactor_core
+/loadskill arid_mouth

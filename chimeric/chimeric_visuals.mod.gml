@@ -12,8 +12,8 @@ for(var i = 0; i < 128; i++) {
 
 //VARIABLES FOR TWEAKING
 global.multi_object = false;
-global.surface_size_x = 26;
-global.surface_size_y = 34;
+global.surface_size_x = 24;
+global.surface_size_y = 32;
 global.surface_mult = 1;
 global.perlin_mult = 0.01 * 2;
 global.size = 5 * global.surface_mult;
