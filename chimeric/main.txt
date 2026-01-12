@@ -1,6 +1,6 @@
 /loadskill weird_science
 /loadskill molten_flesh
-/loadskill vacuum_vacuoles
+/loadskill vacuum_valves
 
 /loadmod chimeric_handler
 /loadmod chimeric_visuals
