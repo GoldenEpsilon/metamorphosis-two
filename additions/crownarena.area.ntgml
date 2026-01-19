@@ -1,0 +1,64 @@
+#define area_name
+    return "???";
+
+#define area_secret
+    return true;
+
+#define area_transit
+if("pedestalarena" in GameCont && GameCont.pedestalarena){
+    GameCont.pedestalarena = false;
+    area = mod_current;
+}
+
+#define area_start
+    with (chestprop) instance_delete(self);
+    with (RadChest) instance_delete(self);
+
+#define area_finish
+
+#define area_sprite(q)
+switch (q) {
+    case sprFloor1: return sprFloor100;
+    case sprFloor1B: return sprFloor100B;
+    case sprFloor1Explo: return sprFloor100Explo;
+    case sprWall1Trans: return sprWall100Trans;
+    case sprWall1Bot: return sprWall100Bot;
+    case sprWall1Top: return sprWall100Top;
+    case sprWall1Out: return sprWall100Out;
+    case sprDebris1: return sprDebris100;
+}
+
+
+#define area_setup
+goal = 1;
+gol = 0;
+safespawn = -1;
+background_color = make_color_rgb(67, 53, 35);
+BackCont.shadcol = c_black;
+//TopCont.fog = sprFog2;
+sound_play_music(-1);
+sound_play_ambient(-1);
+
+#define area_make_floor
+//with (Floor) instance_destroy();
+var x1 = x - 96;
+var x2 = x + 128;
+var y2 = y + 64;
+var y1 = y - 128;
+
+for (var _x = x1; _x < x2; _x += 32) {
+    for (var _y = y2; _y >= y1; _y -= 32) {
+        with (instance_create(_x, _y, Floor)) {
+        }
+    }
+}
+instance_destroy();
+
+#define area_pop_enemies
+//if (random(4) < 1) instance_create(x + 16, y + 16, Bandit);
+
+#define area_pop_props
+//if (random(4) < 1) instance_create(x + 16, y + 16, NightCactus);
+
+#define area_mapdata(lx, ly, lp, ls, ws, ll)
+return [lx, ly + 9];
