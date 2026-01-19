@@ -22,22 +22,47 @@
 #define step
 	if instance_exists(hitme) {
 		with instances_matching_ne(instances_matching_gt(projectile,"speed",0),"ammo_type",-1) {
+			var is_enemy = true;
+			with(Player){
+				if team == other.team {
+					is_enemy = false;
+					break;
+				}
+			}
 			var nearest = instance_nearest_from(x,y,instances_in_circle(instances_matching_ne([Player,enemy],"team",team),x,y,attract_range * skill_get(mod_current)));
 			if instance_exists(nearest) {
 				var _dir = point_direction(x,y,nearest.x,nearest.y)
-				if(abs(angle_difference(_dir, direction)) <= current_time_scale*10){
+
+				var rotationspeed = current_time_scale*1.5*skill_get(mod_current);
+				if(!is_enemy){
+					rotationspeed = current_time_scale*speed*skill_get(mod_current);
+				}
+
+				if(abs(angle_difference(_dir, direction)) <= rotationspeed){
 					direction = _dir;
 					image_angle = _dir;
 				}
 				else if(angle_difference(_dir, direction) > 0){
-					direction+=current_time_scale*speed/2*skill_get(mod_current);
-					image_angle+=current_time_scale*speed/2*skill_get(mod_current);
+					direction += rotationspeed;
+					image_angle += rotationspeed;
 				}
 				else{
-					direction-=current_time_scale*speed/2*skill_get(mod_current);
-					image_angle-=current_time_scale*speed/2*skill_get(mod_current);
+					direction -= rotationspeed;
+					image_angle -= rotationspeed;
 				}
-				image_blend = c_red //for testing purposes
+
+				//WIP visuals, base idea taken from superforce
+				if(chance_ct(1, 1)){
+					with instance_create(x, y, Dust){motion_add(other.direction + random_range(-4, 4), choose(1, 2, 2, 3)); sprite_index = sprExtraFeet}
+				}
+				// image_blend = c_red //for testing purposes
 			}
 		}
 	}
+
+#define chance_ct(_numer, _denom)
+	/*
+		Like 'chance()', but used when being called every frame (for timescale support)
+	*/
+	
+	return (random(_denom) < _numer * current_time_scale);
