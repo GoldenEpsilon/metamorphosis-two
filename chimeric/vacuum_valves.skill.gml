@@ -33,9 +33,9 @@
 			if instance_exists(nearest) {
 				var _dir = point_direction(x,y,nearest.x,nearest.y)
 
-				var rotationspeed = current_time_scale*1.5*skill_get(mod_current);
+				var rotationspeed = current_time_scale*2*skill_get(mod_current);
 				if(!is_enemy){
-					rotationspeed = current_time_scale*speed*skill_get(mod_current);
+					rotationspeed = current_time_scale*16*skill_get(mod_current);
 				}
 
 				if(abs(angle_difference(_dir, direction)) <= rotationspeed){
