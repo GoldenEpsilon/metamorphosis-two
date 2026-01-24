@@ -66,6 +66,25 @@ global.sprWaveBig = sprite_add("mutations/sprites/effects/sprBarWave.png", 8, 0,
 		}
 	}
 	
+	if skill_get("molten_flesh"){
+		if "moltenflesh" in _player{
+			draw_set_font(fntSmall);
+			
+			var _heal_val = _player.heal_hud_value,
+				_damage_val = _player.dmg_hud_value;
+			
+			draw_set_color(c_white)
+			
+			 // Damaging
+			draw_set_halign(fa_left);
+			draw_text_shadow(6, 8, "-" + string(_damage_val));
+			
+			 // Healing
+			draw_set_halign(fa_right);
+			draw_text_shadow(88, 8, "+" + string(abs(_heal_val)));
+		}
+	}
+	
 #define draw_gui
 	 // Player HUD Management:
 	if(instance_exists(Player) && !instance_exists(PopoScene) && !instance_exists(MenuGen)){

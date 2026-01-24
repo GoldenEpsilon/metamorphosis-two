@@ -55,7 +55,7 @@
         type = 2;
         GameCont.crownpoints = 1;
         GameCont.area = GameCont.lastarea;
-        GameCont.subarea = GameCont.lastsubarea;
+        GameCont.subarea = GameCont.lastsubarea + 1;
     }
     instance_destroy(self);
 

@@ -22,7 +22,7 @@
     with(Pickup) {
         if("frigid_breath" not in self) {
             frigid_breath = alarm0;
-            alarm0 *= 1 + (2 * skill_get(mod_current));
+            alarm0 *= 2 * skill_get(mod_current);
         }
         
         if(object_index != Rad and object_index != BigRad and alarm0 > frigid_breath and chance_ct(1, 4)) {

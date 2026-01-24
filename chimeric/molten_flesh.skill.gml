@@ -22,7 +22,11 @@
 
 #define step
 	with(Player) {
-		if("moltenflesh" not in self) moltenflesh = my_health;
+		if("moltenflesh" not in self){
+			moltenflesh = my_health;
+			heal_hud_value = 0;
+			dmg_hud_value = 0;
+		}
 		
 		if my_health != moltenflesh{
 			 // Damage:
@@ -31,6 +35,7 @@
 				
 				 //Reset damage taken:
 				my_health += _damage;
+				dmg_hud_value += _damage;
 				
 				if(fork()){
 					lsthealth = my_health;
@@ -40,6 +45,7 @@
 						
 						if instance_exists(self){
 							my_health = max(0, my_health - 1);
+							dmg_hud_value = max(0, dmg_hud_value - 1);
 							moltenflesh = my_health;
 							
 							 // VFX:
@@ -63,6 +69,7 @@
 				
 				 //Reset healing done:
 				my_health -= _healing;
+				heal_hud_value -= _healing;
 				
 				if(fork()){
 					repeat(_healing){
@@ -70,6 +77,7 @@
 						
 						if instance_exists(self){
 							my_health = min(my_health + 1, maxhealth);
+							heal_hud_value = min(heal_hud_value + 1, maxhealth);
 							moltenflesh = my_health;
 							
 							 // VFX:
