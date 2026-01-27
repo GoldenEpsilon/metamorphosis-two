@@ -260,8 +260,6 @@
 					if brittle_health > 0 {
 						if my_health != pass_health{
 							if my_health < pass_health{
-								flash = true;
-								
 								if !button_check(index, "spec"){
 									var _damage = pass_health - my_health,
 										_last_brittle_health = brittle_health;
@@ -424,8 +422,6 @@
         lstbrittle_health = brittle_health;
         
     	pass_health = my_health;
-    	
-    	flash = false;
 	}
 
 #define wk_yv_draw_script(_inst)

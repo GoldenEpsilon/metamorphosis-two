@@ -28,6 +28,8 @@ global.sprWaveBig = sprite_add("mutations/sprites/effects/sprBarWave.png", 8, 0,
 					_mainBarWidth = map_value(_my_health, 0, _total_health, _x2, _maxBarWidth),
 					_brittleBarWidth = map_value(_brittle_health, _my_health, _total_health, _mainBarWidth, _maxBarWidth),
 					
+					_flash = (_player.sprite_index = _player.spr_hurt && _player.image_index < 1),
+					
 					//Text
 					_x3 = _x2 + _maxBarWidth / 2 + 1,
 					_y3 = _y2;
@@ -37,27 +39,25 @@ global.sprWaveBig = sprite_add("mutations/sprites/effects/sprBarWave.png", 8, 0,
 					
 					//Health bar main
 					var col = player_get_color(_hudIndex);
-					draw_set_color(_player.flash ? c_white : col);
+					draw_set_color(_flash ? c_white : col);
 
 					if _my_health{ draw_rectangle(_x2, _y2, _mainBarWidth, _barHeight, false); }
 					
 					//Health bar brittle
 					var col2 = merge_colour(make_colour_hsv(colour_get_hue(col), colour_get_saturation(col) * 0.85, colour_get_value(col) * 0.45), $6D4536, 0.25);
-					draw_set_color(_player.flash ? c_white : col2);
+					draw_set_color(col2);
 					
 					draw_rectangle(_mainBarWidth + 1, _y2, _brittleBarWidth + _mainBarWidth - _x2, _barHeight, false);
 					
 					//Waves
-					if _brittle_health{ draw_sprite_ext(global.sprWaveBig, 0.4 * current_frame, _mainBarWidth + 1, _y2, image_xscale, image_yscale, image_angle, _player.flash ? c_white : player_get_color(_hudIndex), image_alpha); }
-					if (_my_health < _maxhealth){ draw_sprite_ext(global.sprWaveBig, 0.4 * (current_frame + 4), _brittleBarWidth + _mainBarWidth - _x2 + 1, _y2, image_xscale, image_yscale, image_angle, _player.flash ? c_white : col2, image_alpha); }
+					if _brittle_health{ draw_sprite_ext(global.sprWaveBig, 0.4 * current_frame, _mainBarWidth + 1, _y2, image_xscale, image_yscale, image_angle, _flash ? c_white : player_get_color(_hudIndex), image_alpha); }
+					if (_my_health < _maxhealth){ draw_sprite_ext(global.sprWaveBig, 0.4 * (current_frame + 4), _brittleBarWidth + _mainBarWidth - _x2 + 1, _y2, image_xscale, image_yscale, image_angle, col2, image_alpha); }
 					
 					//Text
 					draw_set_alpha(1);
 					draw_set_color(c_white)
 					draw_set_halign(fa_middle);
 					draw_text_nt(_x3, _y3, string(_current_health) + "/" + string(_total_health))
-					
-					if _player.flash _player.flash = false;
 				}
 				
 				draw_set_alpha(1);
@@ -184,6 +184,10 @@ global.sprWaveBig = sprite_add("mutations/sprites/effects/sprBarWave.png", 8, 0,
 				global.hud_pause_vars = {};
 				with(variable_instance_get_names(self)){
 					lq_set(global.hud_pause_vars, self, variable_instance_get(other, self));
+					
+					 // I don't know why I have to do this but for some reason this ^ code doesn't grab these, so
+					lq_set(global.hud_pause_vars, "sprite_index", variable_instance_get(other, "sprite_index"))
+					lq_set(global.hud_pause_vars, "image_index", variable_instance_get(other, "image_index"))
 				}
 			}
 		}

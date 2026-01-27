@@ -31,6 +31,8 @@
     	
     	rubber_wallbounce = _is_grenade ? 4 : 2;
     	rubber_dofx = _is_flame == true ? false : true;
+    	
+    	if rubber_dofx trailtimer = 0;
     }
     
     //Modded setup
@@ -38,6 +40,8 @@
     	if !is_explosion && !is_meat_explosion{
     		rubber_wallbounce = is_rocket ? 2 : 4;
     		rubber_dofx = is_flame ? false : true;
+    		
+    		if rubber_dofx trailtimer = 0;
     	}
     }
     
@@ -49,6 +53,8 @@
             	sound_play_pitch(sndLaserCrystalHit, 0.5 + orandom(0.1));
             
 				repeat(random_range(10, 15)) instance_create(x, y, Sweat);
+				
+				trailtimer += 30;
 				
 				with(instance_create(x, y, ImpactWrists)){ image_speed = 0.8; image_index = 2 }
         	}
@@ -68,5 +74,7 @@
             image_angle = direction;
     	}
     }
+    
+    with(projectile) if "trailtimer" in self && trailtimer{ instance_create(xprevious, yprevious, DiscTrail); trailtimer -= current_time_scale; }
 
 #define orandom(n)                      return random_range(-n,n);
