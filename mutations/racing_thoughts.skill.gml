@@ -21,12 +21,12 @@
     with(instances_matching_le(enemy, "my_health", 0)) { // Find all dead enemies
         if(!variable_instance_exists(self, "racingthoughts")) {
             racingthoughts = true; // Make sure this only happens once
-            var loadreduce = 3 + (6 * (max(size - 1, 0))); // Figure out how big of a bitch this was
+            var loadreduce = 4 + (8 * (max(size - 1, 0))); // Figure out how big of a bitch this was
             
             with(Player) {
             	gunshine = 7;
-                if(reload >= 1) reload = max(reload - floor(loadreduce), -floor(weapon_get_load(wep)));
-                if(breload >= 1) breload = max(breload - floor(loadreduce/2), -floor(weapon_get_load(bwep)));
+                if(reload >= 1) reload = max(reload - floor(loadreduce), 0);
+                if(breload >= 1) breload = max(breload - floor(loadreduce/2), 0);
             }
         }
     }

@@ -3,9 +3,9 @@
 	global.sprSkillIcon = sprite_add("sprites/select/sprSkill" + string_upper(string(mod_current)) + "Icon.png", 1, 12, 16);
 	global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
 
-#define skill_name    return "ARID MOUTH";
-#define skill_text    return "@yBULLETS @sCAN DESTROY @wWALLS";
-#define skill_ttip    return "bandits on the tongue";
+#define skill_name    return "ACID TEARS";
+#define skill_text    return "@wBULLETS@s CAN DESTROY @wWALLS";
+#define skill_ttip    return "nothing is safe";
 //#define skill_icon    return global.sprSkillHUD;
 #define skill_button  sprite_index = global.sprSkillIcon;
 #define skill_type    return "utility";
@@ -15,15 +15,15 @@
 	}
 
 #define step
-	if "arid_initialized" not in self{
-		arid_initialized = ":P"
+	if "acid_initialized" not in self{
+		acid_initialized = ":P"
 		
-		arid_step_object = noone;
+		acid_step_object = noone;
 	}
 	
-	if !instance_exists(arid_step_object) with script_bind_step(arid_step, depth) other.arid_step_object = self;
+	if !instance_exists(acid_step_object) with script_bind_step(acid_step, depth) other.acid_step_object = self;
 
-#define arid_step
+#define acid_step
 	//Projectile setup
     with(instances_matching(instances_matching([Bullet1, UltraBullet, HeavyBullet], "can_wallbreak", undefined), "team", 2)) can_wallbreak = true;
 	with(instances_matching(instances_matching(instances_matching(CustomProjectile, "ammo_type", 1), "can_wallbreak", undefined), "team", 2)) can_wallbreak = true;
@@ -43,16 +43,9 @@
 						
 						//Collision
 						if(place_meeting(x, y, other)){
-							//Iterate wall damage
-							if "arid_wallbreak" not in self arid_wallbreak = 0;
-							arid_wallbreak++;
-							
-							//Destroy Wall + Bullet if >= 2
-							if arid_wallbreak >= 2{
-								instance_create(x, y, FloorExplo);
-								with(other) event_perform(ev_collision, Wall);
-								instance_destroy();	
-							}
+							instance_create(x, y, FloorExplo);
+							with(other) event_perform(ev_collision, Wall);
+							instance_destroy();	
 							
 							exit;
 						}

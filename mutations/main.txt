@@ -4,4 +4,4 @@
 /loadskill wasteland_king
 /loadskill rubber_spit
 /loadskill reactor_core
-/loadskill arid_mouth
+/loadskill acid_tears

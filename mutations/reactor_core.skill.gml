@@ -125,7 +125,7 @@
             }
         }
         
-        else if(radhigh > 0) {
+        else if(radhigh > 0 and !global.level_start) {
             radhigh -= current_time_scale;
             if(radhigh < 0) radhigh = 0;
         }
@@ -135,7 +135,7 @@
     if("radhigh" not in self) {
         radhigh   = 0;
         hightimer = 0;
-        highspeed = 0.6;
+        highspeed = 0.5;
         highmax   = 30;
     }
      // Make sure we can't exceed the maximum:
