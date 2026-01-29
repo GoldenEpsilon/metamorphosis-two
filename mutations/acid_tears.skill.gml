@@ -6,7 +6,7 @@
 #define skill_name    return "ACID TEARS";
 #define skill_text    return "@wBULLETS@s CAN DESTROY @wWALLS";
 #define skill_ttip    return "nothing is safe";
-//#define skill_icon    return global.sprSkillHUD;
+#define skill_icon    return global.sprSkillHUD;
 #define skill_button  sprite_index = global.sprSkillIcon;
 #define skill_type    return "utility";
 #define skill_take    
