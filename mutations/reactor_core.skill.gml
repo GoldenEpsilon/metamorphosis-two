@@ -4,7 +4,10 @@
 	//global.sprSkillHUD  = sprite_add("sprites/hud/sprSkill" + string_upper(string(mod_current)) + "HUD.png",  1,  8,  8);
     
     global.level_start          = false;
-    
+    global.reactor_draw = script_bind_draw(rad_draw, -10);
+
+#macro highspeed 0.4
+
 #define skill_name    return "REACTOR CORE";
 #define skill_text    return "@gRAD COMBO@s#@wBIG ENEMIES@s DROP @gMORE RADS@s";
 #define skill_ttip    return "uranium fever";
@@ -15,20 +18,30 @@
 	if(array_length(instances_matching(mutbutton, "skill", mod_current)) > 0) {
 		sound_play(sndMut);
 	}
+	
+	with(Player) {
+		if("radhigh" not in self) {
+	        radhigh   = 0;
+	        hightimer = 0;
+	        highmax   = 20;
+	        highgrace = 0;
+	    }
+	}
     
 #define step
+	if(!instance_exists(global.reactor_draw)) global.reactor_draw = script_bind_draw(rad_draw, -10);
+	
     if(instance_exists(GenCont) || instance_exists(Menu)){
 		global.level_start = true;
 	} else if(global.level_start) {
 	    global.level_start = false;
 	    
 	    if(instance_exists(GameCont)) {
-	         // Increase the chance of chimeric mutations appearing if you visit a vault:
-	        with(instances_matching_ne(Player, "radhigh", undefined)) {
-	            radhigh = 0;
-	            if(radhigh = highmax) maxspeed -= highspeed;
-	        }
-	        
+	    	with(instances_matching_ne(Player, "radhigh", null)) {
+	    		highgrace = 60;
+	    	}
+	    	
+	    	 // BIG ENEMIES DROP MORE RADS: 
 	        with(instances_matching_ge(enemy, "size", 2)) {
 	            if(random(2) < 1) {
 	                raddrop = ceil(raddrop * 1.5);
@@ -118,16 +131,27 @@
                 if(race = "steroids" and breload)   breload -= (0.4 * current_time_scale);
             } 
             
-            hightimer -= current_time_scale;
-            if(hightimer <= 0) {
-                hightimer = 0;
-                if(radhigh = highmax) maxspeed -= highspeed;
+            if(!highgrace and instance_exists(enemy)) {
+	            hightimer -= current_time_scale;
+	            if(hightimer <= 0) {
+	                hightimer = 0;
+	                if(radhigh = highmax) {
+	                	maxspeed -= highspeed;
+	                	radhigh = 0;
+	                }
+	                trace(`speed DOWN: ${maxspeed}`);
+	            }
             }
         }
         
-        else if(radhigh > 0 and !global.level_start) {
+        else if(radhigh > 0) {
             radhigh -= current_time_scale;
             if(radhigh < 0) radhigh = 0;
+        }
+        
+        if(highgrace > 0) {
+        	highgrace -= current_time_scale;
+        	if(highgrace < 0) highgrace = 0;
         }
     }
 
@@ -135,20 +159,46 @@
     if("radhigh" not in self) {
         radhigh   = 0;
         hightimer = 0;
-        highspeed = 0.5;
-        highmax   = 30;
+        highmax   = 20;
+        highgrace = 0;
     }
      // Make sure we can't exceed the maximum:
     var _diff = min(_amt, highmax - radhigh);
     
     if(radhigh != highmax and radhigh + _diff >= highmax) {
         maxspeed += highspeed;
+        trace(`speed UP: ${maxspeed}`);
     }
     
     radhigh += _diff;
+    if(highgrace < 10) highgrace = 10;
     
     hightimer = 60;
-    
+
+#define rad_draw
+	with(instances_matching_ne(Player, "radhigh", null)) {
+		if(radhigh = highmax) {
+			draw_set_color(c_white)
+			draw_rectangle(x - 13, y + 11, x + 13, y + 17, 0);
+			draw_set_color(c_green);
+			draw_rectangle(x - 12, y + 12, x + 12, y + 16, 0);
+			draw_set_color(c_lime)
+			draw_rectangle(x - 12, y + 12, x - 12 + (24 * (hightimer/60)), y + 16, 0);
+		}
+		
+		else {
+			draw_set_color(c_black);
+			draw_rectangle(x - 12, y + 12, x + 12, y + 16, 0);
+			if(radhigh) {
+				draw_set_color(c_green);
+				draw_rectangle(x - 12, y + 12, x - 12 + (24 * (radhigh/highmax)), y + 16, 0);
+			}
+		}
+	}
+
+#define cleanup
+	with(global.reactor_draw) instance_destroy(); 
+
 #define array_delete(_array, _index)
 	/*
 	    Credit: Golden Epsilon. Thanks Iris! <3
