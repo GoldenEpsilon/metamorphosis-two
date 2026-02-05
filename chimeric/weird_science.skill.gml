@@ -25,7 +25,7 @@
 #define step
 	with(instances_matching_le(enemy, "my_health", 0)){
 		if chance(1, 4) && !enemy_boss && object_index != InvSpider{
-			repeat (2){
+			for(i = 0; i < skill_get(mod_current) + 1; i++) {
 				with(instance_copy(false)){
 					with(variable_instance_get_names(self)){
 						var	_value = variable_instance_get(other, self),
@@ -39,13 +39,15 @@
 					my_health = ceil(maxhealth / 2);
 					raddrop = 0;
 					kills = 0;
+					
+					motion_add(direction + random_range(12, -12), 8 + random(4));
 				}
 			}
 			
 			sleep(maxhealth);
 			
-			sound_play_pitch(sndToxicBoltGas, 0.8 + orandom(0.2));
-			sound_play_pitch(sndLaserCrystalHit, 0.5 + orandom(0.1));
+			sound_play_pitchvol(sndToxicBoltGas, 0.8 + orandom(0.2), 0.6);
+			sound_play_pitchvol(sndLaserCrystalHit, 0.5 + orandom(0.1), 0.6);
 		}
 	}
 

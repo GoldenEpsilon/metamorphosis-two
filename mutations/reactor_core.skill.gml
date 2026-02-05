@@ -6,7 +6,7 @@
     global.level_start          = false;
     global.reactor_draw = script_bind_draw(rad_draw, -10);
 
-#macro highspeed 0.4
+#macro highspeed 0.6
 
 #define skill_name    return "REACTOR CORE";
 #define skill_text    return "@gRAD COMBO@s#@wBIG ENEMIES@s DROP @gMORE RADS@s";
@@ -127,8 +127,8 @@
             if(radhigh >= highmax) {
                 radhigh = highmax; // Just for cleanliness! .^~^.
                 
-                if(reload)                          reload  -= (0.4 * current_time_scale);
-                if(race = "steroids" and breload)   breload -= (0.4 * current_time_scale);
+                if(reload)                          reload  -= (0.6 * current_time_scale);
+                if(race = "steroids" and breload)   breload -= (0.6 * current_time_scale);
             } 
             
             if(!highgrace and instance_exists(enemy)) {
@@ -173,7 +173,7 @@
     radhigh += _diff;
     if(highgrace < 10) highgrace = 10;
     
-    hightimer = 60;
+    hightimer = 90;
 
 #define rad_draw
 	with(instances_matching_ne(Player, "radhigh", null)) {
@@ -183,7 +183,7 @@
 			draw_set_color(c_green);
 			draw_rectangle(x - 12, y + 12, x + 12, y + 16, 0);
 			draw_set_color(c_lime)
-			draw_rectangle(x - 12, y + 12, x - 12 + (24 * (hightimer/60)), y + 16, 0);
+			draw_rectangle(x - 12, y + 12, x - 12 + (24 * (hightimer/90)), y + 16, 0);
 		}
 		
 		else {
