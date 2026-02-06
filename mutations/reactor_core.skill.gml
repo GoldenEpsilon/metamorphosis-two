@@ -45,11 +45,20 @@
 	    	
 	    	 // BIG ENEMIES DROP MORE RADS: 
 	        with(instances_matching_ge(enemy, "size", 2)) {
-	            if(random(2) < 1) {
-	                raddrop = ceil(raddrop * 1.5);
+	            if(random(5) < 1) {
+					reactor = true;
 	            }
 	        }
 	    }
+	}
+
+	with(instances_matching_le(instances_matching(enemy, "reactor", true), "my_health", 0)){
+		repeat(raddrop * 4 * skill_get(mod_current)){
+			with(instance_create(x,y,Rad)){
+				speed = 4+random(sqrt(other.raddrop));
+				direction = random(360);
+			}
+		}
 	}
 
      // More performant and less finnicky option for when the player has less than max rads:
@@ -138,7 +147,7 @@
 	            if(hightimer <= 0) {
 	                hightimer = 0;
 	                if(radhigh == highmax) {
-	                	maxspeed -= highspeed;
+	                	maxspeed -= highspeed * skill_get(mod_current);
 	                	radhigh = 0;
 	                }
 	                trace(`speed DOWN: ${maxspeed}`);
@@ -168,7 +177,7 @@
     var _diff = min(_amt, highmax - radhigh);
     
     if(radhigh != highmax and radhigh + _diff >= highmax) {
-        maxspeed += highspeed;
+        maxspeed += highspeed * skill_get(mod_current);
         trace(`speed UP: ${maxspeed}`);
     }
     
@@ -201,46 +210,55 @@
 #define glow_draw
 	with(instances_matching_ne(Player, "radhigh", null)) {
 		if(hightimer > 0 && radhigh >= highmax) {
-			var _x;
-			var _y;
-			_x = x + lengthdir_x(2 + cos(current_frame/2), current_frame * 2);
-			_y = y + lengthdir_y(2 + cos(current_frame/2), current_frame * 2);
-			draw_set_fog(true, c_white, 0, 0);
-			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
-
-			_x = x + lengthdir_x(2 + cos(current_frame/2), current_frame * 2 + 180);
-			_y = y + lengthdir_y(2 + cos(current_frame/2), current_frame * 2 + 180);
-			draw_set_fog(true, c_white, 0, 0);
-			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
-
-			_x = x + lengthdir_x(2 + cos(current_frame/2), -current_frame * 2);
-			_y = y + lengthdir_y(2 + cos(current_frame/2), -current_frame * 2);
-			draw_set_fog(true, c_green, 0, 0);
-			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
-
-			_x = x + lengthdir_x(3 + sin(current_frame/2), current_frame * 4);
-			_y = y + lengthdir_y(3 + sin(current_frame/2), current_frame * 4);
-			draw_set_fog(true, c_lime, 0, 0);
-			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
-
-			_x = x + lengthdir_x(3 + sin(current_frame/2), current_frame * 4 + 180);
-			_y = y + lengthdir_y(3 + sin(current_frame/2), current_frame * 4 + 180);
-			draw_set_fog(true, c_lime, 0, 0);
-			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
-
-			_x = x + lengthdir_x(3 + cos(current_frame/4), current_frame * 4 + sin(current_frame/8)*180);
-			_y = y + lengthdir_y(3 + cos(current_frame/4), current_frame * 4 + sin(current_frame/8)*180);
-			draw_set_fog(true, c_lime, 0, 0);
-			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
-
-			_x = x + lengthdir_x(3 + cos(current_frame/4), current_frame * 4 + 180 + sin(current_frame/8)*180);
-			_y = y + lengthdir_y(3 + cos(current_frame/4), current_frame * 4 + 180 + sin(current_frame/8)*180);
-			draw_set_fog(true, c_lime, 0, 0);
-			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
-
-			draw_set_fog(false, c_black, 0, 0);
+			glow(1);
 		}
 	}
+	with(instances_matching(enemy, "reactor", true)){
+		glow(0.5);
+	}
+
+#define glow(vividness)
+	var _x;
+	var _y;
+	var time = current_frame * vividness;
+	_x = x + lengthdir_x(2 + cos(time/2), time * 2) * vividness;
+	_y = y + lengthdir_y(2 + cos(time/2), time * 2) * vividness;
+	draw_set_fog(true, c_white, 0, 0);
+	draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
+
+	_x = x + lengthdir_x(2 + cos(time/2), time * 2 + 180) * vividness;
+	_y = y + lengthdir_y(2 + cos(time/2), time * 2 + 180) * vividness;
+	draw_set_fog(true, c_white, 0, 0);
+	draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
+
+	_x = x + lengthdir_x(2 + cos(time/2), -time * 2) * vividness;
+	_y = y + lengthdir_y(2 + cos(time/2), -time * 2) * vividness;
+	draw_set_fog(true, c_green, 0, 0);
+	draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
+
+	_x = x + lengthdir_x(3 + sin(time/2), time * 4) * vividness;
+	_y = y + lengthdir_y(3 + sin(time/2), time * 4) * vividness;
+	draw_set_fog(true, c_lime, 0, 0);
+	draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+
+	_x = x + lengthdir_x(3 + sin(time/2), time * 4 + 180) * vividness;
+	_y = y + lengthdir_y(3 + sin(time/2), time * 4 + 180) * vividness;
+	draw_set_fog(true, c_lime, 0, 0);
+	draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+
+	if(vividness >= 1){
+		_x = x + lengthdir_x(3 + cos(time/4), time * 4 + sin(time/8)*180) * vividness;
+		_y = y + lengthdir_y(3 + cos(time/4), time * 4 + sin(time/8)*180) * vividness;
+		draw_set_fog(true, c_lime, 0, 0);
+		draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+
+		_x = x + lengthdir_x(3 + cos(time/4), time * 4 + 180 + sin(time/8)*180) * vividness;
+		_y = y + lengthdir_y(3 + cos(time/4), time * 4 + 180 + sin(time/8)*180) * vividness;
+		draw_set_fog(true, c_lime, 0, 0);
+		draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+	}
+
+	draw_set_fog(false, c_black, 0, 0);
 
 #define cleanup
 	with(global.reactor_draw) instance_destroy(); 
