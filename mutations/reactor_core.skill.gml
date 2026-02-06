@@ -5,6 +5,7 @@
     
     global.level_start          = false;
     global.reactor_draw = script_bind_draw(rad_draw, -10);
+    global.reactor_glow_draw = script_bind_draw(glow_draw, 1);
 
 #macro highspeed 0.6
 
@@ -30,6 +31,7 @@
     
 #define step
 	if(!instance_exists(global.reactor_draw)) global.reactor_draw = script_bind_draw(rad_draw, -10);
+	if(!instance_exists(global.reactor_glow_draw)) global.reactor_glow_draw = script_bind_draw(glow_draw, -1);
 	
     if(instance_exists(GenCont) || instance_exists(Menu)){
 		global.level_start = true;
@@ -135,7 +137,7 @@
 	            hightimer -= current_time_scale;
 	            if(hightimer <= 0) {
 	                hightimer = 0;
-	                if(radhigh = highmax) {
+	                if(radhigh == highmax) {
 	                	maxspeed -= highspeed;
 	                	radhigh = 0;
 	                }
@@ -177,7 +179,7 @@
 
 #define rad_draw
 	with(instances_matching_ne(Player, "radhigh", null)) {
-		if(radhigh = highmax) {
+		if(radhigh == highmax) {
 			draw_set_color(c_white)
 			draw_rectangle(x - 13, y + 11, x + 13, y + 17, 0);
 			draw_set_color(c_green);
@@ -196,8 +198,53 @@
 		}
 	}
 
+#define glow_draw
+	with(instances_matching_ne(Player, "radhigh", null)) {
+		if(hightimer > 0 && radhigh >= highmax) {
+			var _x;
+			var _y;
+			_x = x + lengthdir_x(2 + cos(current_frame/2), current_frame * 2);
+			_y = y + lengthdir_y(2 + cos(current_frame/2), current_frame * 2);
+			draw_set_fog(true, c_white, 0, 0);
+			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
+
+			_x = x + lengthdir_x(2 + cos(current_frame/2), current_frame * 2 + 180);
+			_y = y + lengthdir_y(2 + cos(current_frame/2), current_frame * 2 + 180);
+			draw_set_fog(true, c_white, 0, 0);
+			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
+
+			_x = x + lengthdir_x(2 + cos(current_frame/2), -current_frame * 2);
+			_y = y + lengthdir_y(2 + cos(current_frame/2), -current_frame * 2);
+			draw_set_fog(true, c_green, 0, 0);
+			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.6);
+
+			_x = x + lengthdir_x(3 + sin(current_frame/2), current_frame * 4);
+			_y = y + lengthdir_y(3 + sin(current_frame/2), current_frame * 4);
+			draw_set_fog(true, c_lime, 0, 0);
+			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+
+			_x = x + lengthdir_x(3 + sin(current_frame/2), current_frame * 4 + 180);
+			_y = y + lengthdir_y(3 + sin(current_frame/2), current_frame * 4 + 180);
+			draw_set_fog(true, c_lime, 0, 0);
+			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+
+			_x = x + lengthdir_x(3 + cos(current_frame/4), current_frame * 4 + sin(current_frame/8)*180);
+			_y = y + lengthdir_y(3 + cos(current_frame/4), current_frame * 4 + sin(current_frame/8)*180);
+			draw_set_fog(true, c_lime, 0, 0);
+			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+
+			_x = x + lengthdir_x(3 + cos(current_frame/4), current_frame * 4 + 180 + sin(current_frame/8)*180);
+			_y = y + lengthdir_y(3 + cos(current_frame/4), current_frame * 4 + 180 + sin(current_frame/8)*180);
+			draw_set_fog(true, c_lime, 0, 0);
+			draw_sprite_ext(sprite_index, image_index, _x, _y, right * image_xscale, image_yscale, image_angle, c_white, 0.8);
+
+			draw_set_fog(false, c_black, 0, 0);
+		}
+	}
+
 #define cleanup
 	with(global.reactor_draw) instance_destroy(); 
+	with(global.reactor_glow_draw) instance_destroy(); 
 
 #define array_delete(_array, _index)
 	/*
