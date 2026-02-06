@@ -138,8 +138,8 @@
             if(radhigh >= highmax) {
                 radhigh = highmax; // Just for cleanliness! .^~^.
                 
-                if(reload)                          reload  -= (0.6 * current_time_scale);
-                if(race = "steroids" and breload)   breload -= (0.6 * current_time_scale);
+                if(reload)                          reload  -= (0.6 * current_time_scale) * skill_get(mod_current);
+                if(race = "steroids" and breload)   breload -= (0.6 * current_time_scale) * skill_get(mod_current);
             } 
             
             if(!highgrace and instance_exists(enemy)) {
